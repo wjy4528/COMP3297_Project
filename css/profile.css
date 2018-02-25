@@ -1,0 +1,18 @@
+.profile_name {
+  height: 43px;
+  line-height: 43px;
+  color: black;
+  text-align: center;
+  font-size: 30px;
+  display: inline-block;
+}
+.profile_name_box {
+  width: 100%;
+  display: inline-block;
+}
+.divide-block{
+	opacity: 0;
+}
+.intro_box{
+  text-align: left;	
+}
