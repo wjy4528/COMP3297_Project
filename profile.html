@@ -7,7 +7,7 @@
 	<head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Sign up to imageX</title>
+	<title>Profile page</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
 	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
@@ -106,6 +106,67 @@
 				<div class="col-md-8 col-md-offset-2">
 					<h2>Your Profile</h2>
 					<div class="fh5co-spacer fh5co-spacer-sm"></div>
+
+					<form action="#">
+					
+						<!--
+							from https://codepen.io/dsalvagni/pen/BLapab
+							credit to Daniel Salvagni
+						-->
+						
+						<div class="profile">
+							<div class="photo">
+								<input type="file" accept="image/*">
+								<!--<div class="photo__helper">
+									<div class="photo__frame photo__frame--circle">-->
+									<div class="photo__frame">
+										<canvas class="photo__canvas"></canvas>
+										<div class="message is-empty">
+											<p class="message--desktop">Drop your photo here or browse your computer.</p>
+											<p class="message--mobile">Tap here to select your picture.</p>
+										</div>
+										<div class="message is-loading">
+											<i class="fa fa-2x fa-spin fa-spinner"></i>
+										</div>
+										<div class="message is-dragover">
+											<i class="fa fa-2x fa-cloud-upload"></i>
+											<p>Drop your photo</p>
+										</div>
+										<div class="message is-wrong-file-type">
+											<p>Only images allowed.</p>
+											<p class="message--desktop">Drop your photo here or browse your computer.</p>
+											<p class="message--mobile">Tap here to select your picture.</p>
+										</div>
+										<div class="message is-wrong-image-size">
+											<p>Your photo must be larger than 350px.</p>
+										</div>
+									</div>
+								<!--</div>-->
+
+								<!--
+								<div class="photo__options hide">
+									<div class="photo__zoom">
+										<input type="range" class="zoom-handler">
+									</div><a href="javascript:;" class="remove"><i class="fa fa-trash"></i></a>
+								</div>
+								-->
+							</div>
+						</div>
+
+						<!--
+						<hr>
+						<button type="button" id="previewBtn">Preview</button>
+						<hr>
+						<img src="" alt="" class="preview">
+						<img src="" alt="" class="preview preview--rounded">
+						-->
+
+						<!--- end of profile pic -->	
+
+						<!-- email part not mutable by user -->
+						<div class="col-md-12 divide-block"> - </div>
+						<div class="col-md-12 divide-block"> - </div>
+
 						<div class="row">
 							<div class="col-md-3">
 								<div class="profile_name">user email : </div>
@@ -115,9 +176,8 @@
 							</div>
 							<div class="col-md-12 divide-block"> - </div>
 						</div>
+						<!-- end of email part -->
 					
-
-					<form action="#">
 						<div class="row">
 							<div class="col-md-3">
 								<div class="profile_name">user name : </div>
@@ -137,13 +197,12 @@
 							</div>
 							<div class="col-md-12">
 								<div class="form-group">
-									<input type="submit" class="btn btn-primary" value="submit">
+									<input type="submit" class="btn btn-primary" value="save changes">
 								</div>
 							</div>
 						</div>
 					</form>
 				</div>
-        		
         	</div>
        </div>
 	</div>
@@ -182,7 +241,8 @@
 	<!-- Main JS -->
 	<script src="js/main.js"></script>
 
-	
+	<!-- Profile pic upload -->
+	<script src="js/profile_pic.js"></script>	
 
 	
 	</body>

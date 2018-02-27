@@ -77,9 +77,7 @@ strong {
 dfn {
   font-style: italic;
 }
-header {
-  z-index: 10;
-}
+
 h1 {
   font-size: 2em;
   margin: 0.67em 0;
@@ -139,15 +137,6 @@ samp {
   font-size: 1em;
 }
 
-select {
-    width: 20%;
-    border: none;
-    border-radius: 4px;
-    color: inherit;
-    font: inherit;
-    margin: 0;
-}
-
 button,
 input,
 optgroup,
@@ -156,12 +145,10 @@ textarea {
   color: inherit;
   font: inherit;
   margin: 0;
-
 }
 
 button {
   overflow: visible;
-  border-radius: 4px;
 }
 
 button,
@@ -364,10 +351,6 @@ th {
 
 .glyphicon-cloud:before {
   content: "\2601";
-}
-
-.sort-bar{
-  align-items: right
 }
 
 .glyphicon-envelope:before {
