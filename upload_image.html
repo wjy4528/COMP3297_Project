@@ -58,7 +58,8 @@
 
 	<!-- Profile Style -->
 	<link rel="stylesheet" href="css/profile.css">
-
+	<!-- Upload Image Style -->
+	<link rel="stylesheet" href="css/file_upload.css">
 	<!-- Modernizr JS -->
 	<script src="js/modernizr-2.6.2.min.js"></script>
 	<!-- FOR IE9 below -->
@@ -104,104 +105,79 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 col-md-offset-2">
-					<h2>Your Profile</h2>
+					<h2><strong>Upload Your Image</strong></h2>
 					<div class="fh5co-spacer fh5co-spacer-sm"></div>
 
-					<form action="#">
-					
-						<!--
-							from https://codepen.io/dsalvagni/pen/BLapab
-							credit to Daniel Salvagni
-						-->
-						
-						<div class="profile">
-							<div class="photo">
-								<input type="file" accept="image/*">
-								<!--<div class="photo__helper">
-									<div class="photo__frame photo__frame--circle">-->
-									<div class="photo__frame">
-										<canvas class="photo__canvas"></canvas>
-										<div class="message is-empty">
-											<p class="message--desktop">Drop your photo here or browse your computer.</p>
-											<p class="message--mobile">Tap here to select your picture.</p>
-										</div>
-										<div class="message is-loading">
-											<i class="fa fa-2x fa-spin fa-spinner"></i>
-										</div>
-										<div class="message is-dragover">
-											<i class="fa fa-2x fa-cloud-upload"></i>
-											<p>Drop your photo</p>
-										</div>
-										<div class="message is-wrong-file-type">
-											<p>Only images allowed.</p>
-											<p class="message--desktop">Drop your photo here or browse your computer.</p>
-											<p class="message--mobile">Tap here to select your picture.</p>
-										</div>
-										<div class="message is-wrong-image-size">
-											<p>Your photo must be larger than 350px.</p>
-										</div>
-									</div>
-								<!--</div>-->
+				
+				
 
-								<!--
-								<div class="photo__options hide">
-									<div class="photo__zoom">
-										<input type="range" class="zoom-handler">
-									</div><a href="javascript:;" class="remove"><i class="fa fa-trash"></i></a>
-								</div>
-								-->
-							</div>
+				<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+				<div class="file-upload">
+				  <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Add Image</button>
+
+				  <div class="image-upload-wrap">
+				    <input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
+				    <div class="drag-text">
+				      <h3>Drag and drop a file or select add Image</h3>
+				    </div>
+				  </div>
+				  <div class="file-upload-content">
+				    <img class="file-upload-image" src="#" alt="your image" />
+				    <div class="image-title-wrap">
+				      <button type="button" onclick="removeUpload()" class="remove-image">Remove <span class="image-title">Uploaded Image</span></button>
+				    </div>
+				  </div>
+				</div>
+				<script  src="js/index.js"></script>
+					<div class="row">
+						<div class="col-md-3 Category">
+							<div class="profile_name">Select a Category : </div>
 						</div>
-
-						<!--
-						<hr>
-						<button type="button" id="previewBtn">Preview</button>
-						<hr>
-						<img src="" alt="" class="preview">
-						<img src="" alt="" class="preview preview--rounded">
-						-->
-
-						<!--- end of profile pic -->	
-
-						<!-- email part not mutable by user -->
 						<div class="col-md-12 divide-block"> - </div>
-						<div class="col-md-12 divide-block"> - </div>
+						<form class="form-inline">
+		    				<button class="btn btn-outline-success" type="button">Abstract</button>
+		    				<button class="btn btn-outline-success" type="button">Aerial</button>
+		    				<button class="btn btn-outline-success" type="button">Animals</button>
+		    				<button class="btn btn-outline-success" type="button">Architecture</button>
+		    				<button class="btn btn-outline-success" type="button">Black and White</button>
+		    				<button class="btn btn-outline-success" type="button">Family</button>
+		    				<button class="btn btn-outline-success" type="button">Fashion</button>
+		    				<button class="btn btn-outline-success" type="button">Fine Art</button>
+		    				<button class="btn btn-outline-success" type="button">Journalism</button>
+		    				<button class="btn btn-outline-success" type="button">Landscape</button>
+		    				<button class="btn btn-outline-success" type="button">Macro</button>
+		    				<button class="btn btn-outline-success" type="button">Nature</button>
+		    				<button class="btn btn-outline-success" type="button">Night</button>
+		    				<button class="btn btn-outline-success" type="button">People</button>
+		    				<button class="btn btn-outline-success" type="button">Performing Arts</button>
+		    				<button class="btn btn-outline-success" type="button">Sport</button>
+		    				<button class="btn btn-outline-success" type="button">Still Life</button>
+		    				<button class="btn btn-outline-success" type="button">Street</button>
+		    				<button class="btn btn-outline-success" type="button">Travel</button>
+  						</form>
 
-						<div class="row">
-							<div class="col-md-3">
-								<div class="profile_name">user email : </div>
-							</div>
-							<div class="col-md-9">
-								<div class="profile_name">example@example.io</div>
-							</div>
-							<div class="col-md-12 divide-block"> - </div>
+  						<div class="col-md-3 Category">
+							<div class="profile_name">Add Tag: </div>
 						</div>
-						<!-- end of email part -->
-					
-						<div class="row">
-							<div class="col-md-3">
-								<div class="profile_name">user name : </div>
-							</div>
-							<div class="col-md-9">
-								<div class="form-group">
-									<input type="text" class="form-control" placeholder="username">	
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="profile_name">self-description : </div>
-							</div>
-							<div class="col-md-12">
-								<div class="form-group">
-									<textarea name="message" id="message" cols="30" class="form-control intro_box" rows="10" >introduce youself</textarea>
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="form-group">
-									<input type="submit" class="btn btn-primary" value="save changes">
-								</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<input type="text" class="form-control" placeholder="Add Tags">	
 							</div>
 						</div>
-					</form>
+						<div class="col-md-4 Category">
+							<div class="profile_name">Add description:</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<textarea name="message" id="message" cols="30" class="form-control intro_box" rows="10" >Add description</textarea>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<input type="submit" class="btn btn-primary" value="Upload">
+							</div>
+						</div>
+					</div>
 				</div>
         	</div>
        </div>

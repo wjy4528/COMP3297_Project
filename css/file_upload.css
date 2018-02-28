@@ -4,12 +4,16 @@ body {
 }
 
 .file-upload {
-  background-color: #ffffff;
-  width: 600px;
+  
+  width: 100%;
   margin: 0 auto;
-  padding: 20px;
+  
 }
 
+.Category{
+  margin-top: 5%;
+  width: 100%;
+}
 .file-upload-btn {
   width: 100%;
   margin: 0;
