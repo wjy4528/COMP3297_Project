@@ -21,7 +21,9 @@ html {
 body {
   margin: 0;
 }
-
+header{
+  z-index: 10;
+}
 article,
 aside,
 details,
@@ -4789,7 +4791,7 @@ tbody.collapse.in {
 .navbar-brand {
   float: left;
   padding: 20px 20px;
-  font-size: 18px;
+  font-size: 40px;
   line-height: 20px;
   height: 60px;
 }
@@ -7591,7 +7593,7 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
   text-transform: uppercase;
   letter-spacing: 2px;
-  font-size: 20px;
+  font-size: 40px;
   font-family: "Montserrat", arial, sans-serif;
   color: #000;
 }

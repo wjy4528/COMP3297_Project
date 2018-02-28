@@ -6,6 +6,21 @@
   font-size: 30px;
   display: inline-block;
 }
+
+.profile_descrip {
+  height: 43px;
+  line-height: 30px;
+  color: black;
+  text-align: left;
+  font-size: 20px;
+  display: inline-block;
+}
+
+.profile_pic img{
+  height: 300px;
+  width: 80%;
+}
+
 .profile_name_box {
   width: 100%;
   display: inline-block;
@@ -209,6 +224,7 @@
 .photo {
   text-align: center;
   margin-bottom: 15px;
+  
 }
 .photo input[type=file] {
   display: none;
@@ -238,12 +254,13 @@
   display: inline-block;
 }
 .photo__frame {
+  border-style: solid;
   cursor: move;
   overflow: hidden;
   position: relative;
   display: inline-block;
-  width: 160px;
-  height: 160px;
+  width: 250px;
+  height: 250px;
 }
 .photo__frame img,
 .photo__helper img {

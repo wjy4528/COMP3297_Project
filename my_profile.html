@@ -7,7 +7,7 @@
 	<head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Hydrogen &mdash; A free HTML5 Template by FREEHTML5.CO</title>
+	<title>Profile page</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
 	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
@@ -55,6 +55,10 @@
 	<link rel="stylesheet" href="css/salvattore.css">
 	<!-- Theme Style -->
 	<link rel="stylesheet" href="css/style.css">
+
+	<!-- Profile Style -->
+	<link rel="stylesheet" href="css/profile.css">
+
 	<!-- Modernizr JS -->
 	<script src="js/modernizr-2.6.2.min.js"></script>
 	<!-- FOR IE9 below -->
@@ -67,11 +71,11 @@
 		
 	<div id="fh5co-offcanvass">
 		<a href="#" class="fh5co-offcanvass-close js-fh5co-offcanvass-close">Menu <i class="icon-cross"></i> </a>
-		<h1 class="fh5co-logo"><a class="navbar-brand" href="index.html">Hydrogen</a></h1>
+		<h1 class="fh5co-logo"><a class="navbar-brand" href="index.html">ImageX</a></h1>
 		<ul>
 			<li><a href="index.html">Home</a></li>
-			<li class="active"><a href="about.html">About</a></li>
-			<li><a href="profile.html">My Profile</a></li>
+			<li><a href="about.html">About</a></li>
+			<li class="active"><a href="profile.html">My Profile</a></li>
 			<li><a href="signin.html">Sign in</a></li>
 		</ul>
 		<h3 class="fh5co-lead">Connect with us</h3>
@@ -88,7 +92,7 @@
 			<div class="row">
 				<div class="col-md-12">
 					<a href="#" class="fh5co-menu-btn js-fh5co-menu-btn">Menu <i class="icon-menu"></i></a>
-					<a class="navbar-brand" href="index.html">Hydrogen</a>		
+					<a class="navbar-brand" href="index.html">ImageX</a>		
 				</div>
 			</div>
 		</div>
@@ -100,19 +104,70 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 col-md-offset-2">
-					<h2>Personal Bio</h2>
+					<h2><strong>Your Profile</strong></h2>
 					<div class="fh5co-spacer fh5co-spacer-sm"></div>
-					<p>
-					<img src="images/img_29_large.jpg" alt="Free HTML5 template by FREEHTML5.co" class="img-rounded img-responsive"></p>
 
-					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-				
-					<p> The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen. She packed her seven versalia, put her initial into the belt and made herself on the way. When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet Village and the subline of her own road, the Line Lane. </p>
+					<form action="#">
 					
+						<!--
+							from https://codepen.io/dsalvagni/pen/BLapab
+							credit to Daniel Salvagni
+						-->
+						
+						<div class="profile">
+							<div class="profile_pic">
+								<img src="images/img_3.jpg">
+							</div>
+						</div>
+
+						<!--
+						<hr>
+						<button type="button" id="previewBtn">Preview</button>
+						<hr>
+						<img src="" alt="" class="preview">
+						<img src="" alt="" class="preview preview--rounded">
+						-->
+
+						<!--- end of profile pic -->	
+
+						<!-- email part not mutable by user -->
+						<div class="col-md-12 divide-block"> - </div>
+						<div class="col-md-12 divide-block"> - </div>
+
+						<div class="row">
+							<div class="col-md-3">
+								<div class="profile_name"><strong>User Email:</strong></div>
+							</div>
+							<div class="col-md-9">
+								<div class="profile_name">example@example.io</div>
+							</div>
+							<div class="col-md-12 divide-block"> - </div>
+						</div>
+						<!-- end of email part -->
 					
+						<div class="row">
+							<div class="col-md-3">
+								<div class="profile_name"><strong>User name:</strong></div>
+							</div>
+							<div class="col-md-9">
+								<div class="profile_name">example</div>
+							</div>
+							<div class="col-md-12 divide-block"> - </div>
+							<div class="col-md-4">
+								<div class="profile_name"><strong>Self-discription:</strong></div>
+							</div>
+							<div class="col-md-9" style="width: 100%">
+								<div class="profile_descrip">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+							</div>
+							<div class="col-md-12 divide-block"> - </div>
+							<div class="col-md-12">
+								<div class="form-group">
+									<input type="submit" class="btn btn-primary" value="Edit">
+								</div>
+							</div>
+						</div>
+					</form>
 				</div>
-				
-        		
         	</div>
        </div>
 	</div>
@@ -151,7 +206,8 @@
 	<!-- Main JS -->
 	<script src="js/main.js"></script>
 
-	
+	<!-- Profile pic upload -->
+	<script src="js/profile_pic.js"></script>	
 
 	
 	</body>
