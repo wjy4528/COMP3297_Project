@@ -115,99 +115,47 @@
 					
 				</div>
 
-			<div id="fh5co-board" data-columns>
+				<div id="fh5co-board" data-columns>
+					{% for img in images %}
+						<div class="item">
+							<div class="animate-box">
+								<a href="/static/media/{{img.imagefile}}" class="image-popup fh5co-board-img" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?">
+									<img src="/static/media/{{img.imagefile}}" alt="Free HTML5 Bootstrap template">
+								</a>
+							</div>
+							<div class="fh5co-desc">
+								<p><strong>Like: {{img.likes}} &nbsp&nbsp&nbsp Download: {{img.download}}</strong>
+									</br> <strong> {{img.tags}} </strong>
+								</p>
+							</div>
 
-        	<div class="item">
-        		<div class="animate-box">
-	        		<a href="/static/images/img_1.jpg" class="image-popup fh5co-board-img" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?"><img src="/static/images/img_1.jpg" alt="Free HTML5 Bootstrap template"></a>
-        		</div>
-
-        		<div class="fh5co-desc">
-        			<p><strong>Like: 159 &nbsp&nbsp&nbsp Download: 248</strong>
-        				</br> Photographer:
-        				</br> Description...
-        				</br> <strong> #tag #tag </strong>
-     				</p>
-     				<div class="img-button">
-	     				<div class="delete-form-group">
-							<input type="submit" class="btn btn-primary" value="Edit">
 						</div>
-	     				<div class="delete-form-group">
-							<input type="submit" class="btn btn-primary" value="Delete">
-						</div>
-					</div>
-        		</div>
+					{% endfor %}
 
-        	</div>
-        	<div class="item">
-        		<div class="animate-box">
-	        		<a href="/static/images/img_1.jpg" class="image-popup fh5co-board-img" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?"><img src="/static/images/img_1.jpg" alt="Free HTML5 Bootstrap template"></a>
-        		</div>
+					<!-- <div class="item"> -->
+						<!-- <div class="animate-box"> -->
+							<!-- <a href="/static/images/img_1.jpg" class="image-popup fh5co-board-img" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?"><img src="/static/images/img_1.jpg" alt="Free HTML5 Bootstrap template"></a> -->
+						<!-- </div> -->
 
-        		<div class="fh5co-desc">
-        			<p><strong>Like: 159 &nbsp&nbsp&nbsp Download: 248</strong>
-        				</br> Photographer:
-        				</br> Description...
-        				</br> <strong> #tag #tag </strong>
-     				</p>
-     				<div class="img-button">
-	     				<div class="delete-form-group">
-							<input type="submit" class="btn btn-primary" value="Edit">
-						</div>
-	     				<div class="delete-form-group">
-							<input type="submit" class="btn btn-primary" value="Delete">
-						</div>
-					</div>
-        		</div>
-
-        	</div>
-        	<div class="item">
-        		<div class="animate-box">
-	        		<a href="/static/images/img_1.jpg" class="image-popup fh5co-board-img" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?"><img src="/static/images/img_3.jpg" alt="Free HTML5 Bootstrap template"></a>
-        		</div>
-
-        		<div class="fh5co-desc">
-        			<p><strong>Like: 159 &nbsp&nbsp&nbsp Download: 248</strong>
-        				</br> Photographer:
-        				</br> Description...
-        				</br> <strong> #tag #tag </strong>
-     				</p>
-     				<div class="img-button">
-	     				<div class="delete-form-group">
-							<input type="submit" class="btn btn-primary" value="Edit">
-						</div>
-	     				<div class="delete-form-group">
-							<input type="submit" class="btn btn-primary" value="Delete">
-						</div>
-					</div>
-        		</div>
-
-        	</div>
-        	<div class="item">
-        		<div class="animate-box">
-	        		<a href="/static/images/img_1.jpg" class="image-popup fh5co-board-img" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?"><img src="/static/images/img_4.jpg" alt="Free HTML5 Bootstrap template"></a>
-        		</div>
-
-        		<div class="fh5co-desc">
-        			<p><strong>Like: 159 &nbsp&nbsp&nbsp Download: 248</strong>
-        				</br> Photographer:
-        				</br> Description...
-        				</br> <strong> #tag #tag </strong>
-     				</p>
-     				<div class="img-button">
-	     				<div class="delete-form-group">
-							<input type="submit" class="btn btn-primary" value="Edit">
-						</div>
-	     				<div class="delete-form-group">
-							<input type="submit" class="btn btn-primary" value="Delete">
-						</div>
-					</div>
-        		</div>
-
-        	</div>
-
-        	</div>
-       </div>
+						<!-- <div class="fh5co-desc"> -->
+							<!-- <p><strong>Like: 159 &nbsp&nbsp&nbsp Download: 248</strong> -->
+								<!-- </br> Photographer: -->
+								<!-- </br> Description... -->
+								<!-- </br> <strong> #tag #tag </strong> -->
+							<!-- </p> -->
+							<!-- <div class="img-button"> -->
+								<!-- <div class="delete-form-group"> -->
+									<!-- <input type="submit" class="btn btn-primary" value="Edit"> -->
+								<!-- </div> -->
+								<!-- <div class="delete-form-group"> -->
+									<!-- <input type="submit" class="btn btn-primary" value="Delete"> -->
+								<!-- </div> -->
+							<!-- </div> -->
+						<!-- </div> -->
+					<!-- </div> -->
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<footer id="fh5co-footer">

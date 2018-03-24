@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.conf import settings
+from django.conf.urls.static import static
 
 from . import views
 
@@ -24,10 +26,13 @@ urlpatterns = [
     path('home/', views.home, name='home'),
     path('signin/', views.signin, name='signin'),
     path('signup/', views.signup, name='signup'),
+    path('signout/', views.signout, name='signout'),
     path('my_profile/', views.my_profile, name='my_profile'),
     path('edit_profile/', views.edit_profile, name='edit_profile'),
-    path('image/member/<int:memberID>', views.my_image, name='my_image'),
+    path('image/member/<int:memberID>', views.member_image, name='member_image'),
+    path('image/self', views.my_image, name='my_image'),
     path('image/all/', views.all_image, name='all_image'),
+    path('image/search', views.search_image, name='search_image'),
     path('image/upload/page/', views.upload_image_page, name='upload_image_page'),
     path('image/upload/new/', views.upload_image_data, name='upload_image_data'),
     path('signindata', views.signindata, name='signindata'),

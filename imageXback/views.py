@@ -5,14 +5,17 @@ from django.contrib.auth.decorators import login_required
 
 from . import models
 
+from django.db.models import Q
+
 import re
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+    return HttpResponse("Hello, world. You're at the imageX index.")
 
 def home(request):
     template = loader.get_template('index.html')
-    return HttpResponse(template.render({}, request))
+    images = models.Image.objects.all()
+    return HttpResponse(template.render({'images':images}, request))
 
 def signin(request):
     template = loader.get_template('signin.html')
@@ -22,6 +25,14 @@ def signup(request):
     template = loader.get_template('signup.html')
     return HttpResponse(template.render({}, request))
 
+def search_image(request):
+    search_str = request.GET['searchstring']
+    template = loader.get_template('index.html')
+    images = models.Image.objects.all().filter( 
+        Q( category=search_str ) | Q( tags__icontains=search_str ) )
+
+    return HttpResponse(template.render({'images':images}, request))
+
 def my_profile(request):
     template = loader.get_template('my_profile.html')
     return HttpResponse(template.render({}, request))
@@ -30,13 +41,20 @@ def edit_profile(request):
     template = loader.get_template('edit_profile.html')
     return HttpResponse(template.render({}, request))
 
-def my_image(request, memberID):
-    template = loader.get_template('my_image.html')
+def all_image(request):
+    template = loader.get_template('index.html')
     return HttpResponse(template.render({}, request))
 
-def all_image(request):
+def member_image(request, memberID):
+    template = loader.get_template('index.html')
+    images = models.Image.objects.all().filter( uploader_id=memberID )
+    return HttpResponse(template.render({'images':images}, request))
+
+@login_required
+def my_image(request):
     template = loader.get_template('my_image.html')
-    return HttpResponse(template.render({}, request))
+    images = models.Image.objects.all().filter( uploader_id=request.user.id )
+    return HttpResponse(template.render({'images':images}, request))
 
 @login_required
 def upload_image_page(request):
@@ -49,6 +67,7 @@ def upload_image_data(request):
     if request.method == 'POST':
         p_dict = dict(request.POST)
         p_dict['uploader'] = request.user.id
+        p_dict['tags'] = ','.join( p_dict['tags'] )
         image_obj = models.ImageForm(p_dict, request.FILES)
 
         if image_obj.is_valid():
@@ -64,7 +83,7 @@ def upload_image_data(request):
         return redirect( upload_image_page )
 
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 def signindata(request):
 
@@ -94,4 +113,9 @@ def signupdata(request):
     u.save()
     login(request, u)
 
+    return HttpResponseRedirect('/')
+
+@login_required
+def signout(request):
+    logout(request)
     return HttpResponseRedirect('/')
