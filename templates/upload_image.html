@@ -105,81 +105,96 @@
 	<div id="fh5co-main">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-8 col-md-offset-2">
-					<h2><strong>Upload Image</strong></h2>
-					<div class="fh5co-spacer fh5co-spacer-sm"></div>
+				<form action="/image/upload/new/" method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+					<div class="col-md-8 col-md-offset-2">
+						<h2><strong>Upload Image</strong></h2>
+						<div class="fh5co-spacer fh5co-spacer-sm"></div>
+					<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+					<div class="file-upload">
+					  <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Add Image</button>
 
-				
-				
-
-				<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-				<div class="file-upload">
-				  <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Add Image</button>
-
-				  <div class="image-upload-wrap">
-				    <input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
-				    <div class="drag-text">
-				      <h3>Drag and drop a file or select add Image</h3>
-				    </div>
-				  </div>
-				  <div class="file-upload-content">
-				    <img class="file-upload-image" src="#" alt="your image" />
-				    <div class="image-title-wrap">
-				      <button type="button" onclick="removeUpload()" class="remove-image">Remove <span class="image-title">Uploaded Image</span></button>
-				    </div>
-				  </div>
-				</div>
-				<script  src="js/index.js"></script>
-					<div class="row">
-						<div class="col-md-3 Category">
-							<div class="profile_name">Select a Category : </div>
+					  <div class="image-upload-wrap">
+						<input name="imagefile" class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
+						<div class="drag-text">
+						  <h3>Drag and drop a file or select add Image</h3>
 						</div>
-						<div class="col-md-12 divide-block"> - </div>
-						<form class="form-inline">
-		    				<button class="btn btn-outline-success" type="button">Abstract</button>
-		    				<button class="btn btn-outline-success" type="button">Aerial</button>
-		    				<button class="btn btn-outline-success" type="button">Animals</button>
-		    				<button class="btn btn-outline-success" type="button">Architecture</button>
-		    				<button class="btn btn-outline-success" type="button">Black and White</button>
-		    				<button class="btn btn-outline-success" type="button">Family</button>
-		    				<button class="btn btn-outline-success" type="button">Fashion</button>
-		    				<button class="btn btn-outline-success" type="button">Fine Art</button>
-		    				<button class="btn btn-outline-success" type="button">Journalism</button>
-		    				<button class="btn btn-outline-success" type="button">Landscape</button>
-		    				<button class="btn btn-outline-success" type="button">Macro</button>
-		    				<button class="btn btn-outline-success" type="button">Nature</button>
-		    				<button class="btn btn-outline-success" type="button">Night</button>
-		    				<button class="btn btn-outline-success" type="button">People</button>
-		    				<button class="btn btn-outline-success" type="button">Performing Arts</button>
-		    				<button class="btn btn-outline-success" type="button">Sport</button>
-		    				<button class="btn btn-outline-success" type="button">Still Life</button>
-		    				<button class="btn btn-outline-success" type="button">Street</button>
-		    				<button class="btn btn-outline-success" type="button">Travel</button>
-  						</form>
-
-  						<div class="col-md-3 Category">
-							<div class="profile_name">Add Tags: </div>
+					  </div>
+					  <div class="file-upload-content">
+						<img class="file-upload-image" src="#" alt="your image" />
+						<div class="image-title-wrap">
+						  <button type="button" onclick="removeUpload()" class="remove-image">Remove <span class="image-title">Uploaded Image</span></button>
 						</div>
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" placeholder="Add Tags">	
+					  </div>
+					</div>
+						<div class="row">
+							<div class="col-md-3 Category">
+								<div class="profile_name">Select a Category : </div>
 							</div>
-						</div>
-						<div class="col-md-4 Category">
-							<div class="profile_name">Add Description:</div>
-						</div>
-						<div class="col-md-12">
-							<div class="form-group">
-								<textarea name="message" id="message" cols="30" class="form-control intro_box" rows="10" >Type your description here...</textarea>
+							<input name='category' type="text" id="category-name-id" style="display: none">
+							<div class="col-md-12 divide-block"> - </div>
+							<!-- <form class="form-inline"> -->
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('Abstract');">Abstract</button>
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('Aerial');">Aerial</button>
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('Animals');">Animals</button>
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('Architecture');">Architecture</button>
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('Black and White');">Black and White</button>
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('Family');">Family</button>
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('Fashion');">Fashion</button>
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('Fine Art');">Fine Art</button>
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('Journalism');">Journalism</button>
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('Landscape');">Landscape</button>
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('Macro');">Macro</button>
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('Nature');">Nature</button>
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('Night');">Night</button>
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('People');">People</button>
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('Performing Arts');">Performing Arts</button>
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('Sport');">Sport</button>
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('Still Life');">Still Life</button>
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('Street');">Street</button>
+								<button class="btn btn-outline-success" type="button" onclick="choose_category('Travel');">Travel</button>
+							<!-- </form> -->
+
+							<div class="col-md-3 Category">
+								<div class="profile_name">Add Tags: </div>
 							</div>
-						</div>
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="submit" class="btn btn-primary" value="Upload">
+							<div class="col-md-12">
+								<div class="form-group">
+									<input name="tags" type="text" class="form-control" placeholder="Add Tags">	
+								</div>
+							</div>
+							<div class="col-md-4 Category">
+								<div class="profile_name">Add Description:</div>
+							</div>
+							<div class="col-md-12">
+								<div class="form-group">
+									<textarea name="description" id="message" cols="30" class="form-control intro_box" rows="10" >Type your description here...</textarea>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="form-group">
+									<input type="submit" class="btn btn-primary" value="Upload">
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+				
+				</form>
+				
+				{% if form.errors %}
+					{% for field in form %}
+						{% for error in field.errors %}
+							<div class="alert alert-danger">
+								<strong>{{ error|escape }}</strong>
+							</div>
+						{% endfor %}
+					{% endfor %}
+					{% for error in form.non_field_errors %}
+						<div class="alert alert-danger">
+							<strong>{{ error|escape }}</strong>
+						</div>
+					{% endfor %}
+				{% endif %}
         	</div>
        </div>
 	</div>
@@ -202,7 +217,6 @@
 		</div>
 	</footer>
 
-
 	<!-- jQuery -->
 	<script src="/static/js/jquery.min.js"></script>
 	<!-- jQuery Easing -->
@@ -221,6 +235,13 @@
 	<!-- Profile pic upload -->
 	<script src="/static/js/profile_pic.js"></script>	
 
+	<script  src="/static/js/index.js"></script>
+
+	<script>
+	var choose_category = function(s){
+		$("#category-name-id").val( s );
+	}
+	</script>
 	
 	</body>
 </html>

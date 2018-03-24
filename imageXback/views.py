@@ -1,6 +1,11 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
+from django.contrib.auth.decorators import login_required
+
+from . import models
+
+import re
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
@@ -25,33 +30,68 @@ def edit_profile(request):
     template = loader.get_template('edit_profile.html')
     return HttpResponse(template.render({}, request))
 
-def my_image(request):
+def my_image(request, memberID):
     template = loader.get_template('my_image.html')
     return HttpResponse(template.render({}, request))
 
-def upload_image(request):
-    template = loader.get_template('upload_image.html')
+def all_image(request):
+    template = loader.get_template('my_image.html')
     return HttpResponse(template.render({}, request))
 
+@login_required
+def upload_image_page(request):
+    template = loader.get_template('upload_image.html')
+    return HttpResponse(template.render({'form': None}, request))
+
+@login_required
+def upload_image_data(request):
+
+    if request.method == 'POST':
+        p_dict = dict(request.POST)
+        p_dict['uploader'] = request.user.id
+        image_obj = models.ImageForm(p_dict, request.FILES)
+
+        if image_obj.is_valid():
+            image_obj.save()
+            return HttpResponseRedirect('/')
+        else:
+            for field in image_obj:
+                if field.errors:
+                    print(field.errors)
+            print( 'heyheyhey' )
+            return render_to_response('upload_image.html', {'form': image_obj})
+    else:
+        return redirect( upload_image_page )
+
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+
 def signindata(request):
-    print( request.POST )
-    if signin_auth( request.POST['username'], request.POST['password'] ):
-        return HttpResponse('yes')
+
+    user = authenticate(
+        username=request.POST['username'],
+        password=request.POST['password'])
+
+    if user:
+        login(request, user)
+
+        return_to = request.META.get('HTTP_REFERER', False)
+        if return_to:
+            reobj = re.match(r'.*\?next=(.*)',return_to)
+            if reobj:
+                print( reobj.groups(0)[0] )
+                return HttpResponseRedirect(reobj.groups(0)[0])
+        
+        return HttpResponseRedirect('/')
     else:
         return redirect( signin )
 
 def signupdata(request):
-    signup_create( request.POST['username'], request.POST['password'] )
-    return redirect( signin )
 
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+    u = User.objects.create_user(
+        username=request.POST['username'], 
+        password=request.POST['password'])
+    u.save()
+    login(request, u)
 
-def signup_create(username, password):
-    User.objects.create_user(username=username, password=password).save()
-
-def signin_auth(username, password):
-    user = authenticate(username=username,password=password)
-
-    return user != None
-
+    return HttpResponseRedirect('/')

@@ -1,4 +1,7 @@
 /imageXback/__pycache__/
+/stored_images/
+/media/
+/imageXback/migrations
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
