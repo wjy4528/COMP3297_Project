@@ -17,6 +17,22 @@ def signup(request):
     template = loader.get_template('signup.html')
     return HttpResponse(template.render({}, request))
 
+def my_profile(request):
+    template = loader.get_template('my_profile.html')
+    return HttpResponse(template.render({}, request))
+
+def edit_profile(request):
+    template = loader.get_template('edit_profile.html')
+    return HttpResponse(template.render({}, request))
+
+def my_image(request):
+    template = loader.get_template('my_image.html')
+    return HttpResponse(template.render({}, request))
+
+def upload_image(request):
+    template = loader.get_template('upload_image.html')
+    return HttpResponse(template.render({}, request))
+
 def signindata(request):
     print( request.POST )
     if signin_auth( request.POST['username'], request.POST['password'] ):
