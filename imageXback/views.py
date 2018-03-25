@@ -2,13 +2,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.shortcuts import render, redirect, render_to_response
 from django.contrib.auth.decorators import login_required
-
+from django.contrib import messages
+import datetime
 from . import models
 
 from django.db.models import Q
 
 import re
-
 def index(request):
     return HttpResponse("Hello, world. You're at the imageX index.")
 
@@ -30,6 +30,14 @@ def search_image(request):
     template = loader.get_template('index.html')
     images = models.Image.objects.all().filter( 
         Q( category=search_str ) | Q( tags__icontains=search_str ) )
+
+    return HttpResponse(template.render({'images':images}, request))
+
+def search_category(request):
+    search_str = 'Family'
+    template = loader.get_template('index.html')
+    images = models.Image.objects.all().filter( 
+        Q( category=search_str ) )
 
     return HttpResponse(template.render({'images':images}, request))
 
@@ -65,9 +73,11 @@ def upload_image_page(request):
 def upload_image_data(request):
 
     if request.method == 'POST':
+        now = datetime.datetime.now()
         p_dict = dict(request.POST)
         p_dict['uploader'] = request.user.id
         p_dict['tags'] = ','.join( p_dict['tags'] )
+        p_dict['update_time'] = now
         image_obj = models.ImageForm(p_dict, request.FILES)
 
         if image_obj.is_valid():
@@ -101,17 +111,24 @@ def signindata(request):
                 print( reobj.groups(0)[0] )
                 return HttpResponseRedirect(reobj.groups(0)[0])
         
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/home')
     else:
-        return redirect( signin )
+        messages.add_message(request, messages.INFO, 'Wrong Password or Username!')
+        return render(request, 'signin.html')
 
 def signupdata(request):
-
-    u = User.objects.create_user(
-        username=request.POST['username'], 
-        password=request.POST['password'])
-    u.save()
-    login(request, u)
+    if User.objects.filter(username=request.POST['username']).exists():
+        messages.add_message(request, messages.INFO, 'Too slow! Username has been registered!')
+        return render(request, 'signup.html')
+    elif (request.POST['confirm_password']!=request.POST['password']):
+        messages.add_message(request, messages.INFO, 'Idiot! Password must be the same!')
+        return render(request, 'signup.html')
+    else:
+        u = User.objects.create_user(
+            username=request.POST['username'], 
+            password=request.POST['password'])
+        u.save()
+        login(request, u)
 
     return HttpResponseRedirect('/')
 

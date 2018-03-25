@@ -70,15 +70,16 @@
 		<h1 class="fh5co-logo"><a class="navbar-brand" href="index.html">imageX</a></h1>
 		<ul>
 			<li class="active"><a href="#">Home</a></li>
-			<li><a href="about">About</a></li>
+			<li><a href="/home">About</a></li>
 			{% if user.is_authenticated %}
-				<li><a href="my_profile">My Profile</a></li>
-				<li><a href="my_image">My Image</a></li>
-				<li><a href="image/upload/page/">upload</a></li>
+				<li><a href="/my_profile">My Profile</a></li>
+				<li><a href="/image/self">My Image</a></li>
+				<li><a href="/signout">Log Out</a></li>
 			{% else %}
-				<li><a href="signin">signin</a></li>
+				<li><a href="/signin">Sign In</a></li>
+				<li><a href="/signup">Sign Up</a></li>
 			{% endif %}
-			<li><a href="/signout">Log out</a></li>
+			
 		</ul>
 		<h3 class="fh5co-lead">Connect with us</h3>
 		<p class="fh5co-social-icons">
@@ -130,10 +131,10 @@
 				<form id="search_bar" action="/image/search" method="GET">
 					<input class="search" type="text" size=30 id="search" name="searchstring" placeholder="  Keywords...">
 					<input type="image" src="/static/images/image_ic_search.png" alt="" style=" width:25px; height:25px; position: relative; top : 6px">
-				</form>
+				</form id="sort" action="/sort_result" method="GET">
 				<select style="margin-left: 61%">
-					<option>Sort by Most Recent</option>
-					<option>Sort by Popularity</option>
+					<option value="time">Sort by Most Recent</option>
+					<option value="popularity">Sort by Popularity</option>
 				</select>
 			</div>
 
@@ -150,7 +151,7 @@
 								<p><strong>Like: {{img.likes}} &nbsp&nbsp&nbsp Download: {{img.download}}</strong>
 									</br> Photographer: {{img.uploader}}
 									<!-- </br> Description... -->
-									</br> <strong> {{img.tags}} </strong>
+									</br> <strong> #{{img.tags}} </strong>
 								</p>
 							</div>
 
@@ -253,6 +254,9 @@
 		var search_cate = function(){
 
 		}
+
+
+		
 	</script>
 	
     {% include "./footer.html" %}
