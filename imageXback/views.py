@@ -2,13 +2,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.shortcuts import render, redirect, render_to_response
 from django.contrib.auth.decorators import login_required
-
+from django.contrib import messages
+import datetime
 from . import models
 
 from django.db.models import Q
 
 import re
-
 def index(request):
     return HttpResponse("Hello, world. You're at the imageX index.")
 
@@ -30,6 +30,14 @@ def search_image(request):
     template = loader.get_template('index.html')
     images = models.Image.objects.all().filter( 
         Q( category=search_str.lower() ) | Q( tags__icontains=search_str ) )
+
+    return HttpResponse(template.render({'images':images}, request))
+
+def search_category(request):
+    search_str = 'Family'
+    template = loader.get_template('index.html')
+    images = models.Image.objects.all().filter( 
+        Q( category=search_str ) )
 
     return HttpResponse(template.render({'images':images}, request))
 
@@ -65,7 +73,6 @@ def upload_image_page(request):
 def upload_image_data(request):
 
     if request.method == 'POST':
-
         try:
             p_dict = dict(request.POST)
             p_dict['uploader'] = request.user.id
@@ -73,8 +80,6 @@ def upload_image_data(request):
             p_dict['category'] = p_dict['category'][0].lower()
         except KeyError:
             return redirect( upload_image_page )
-
-        print( p_dict )
 
         image_obj = models.ImageForm(p_dict, request.FILES)
 
@@ -85,7 +90,7 @@ def upload_image_data(request):
             for field in image_obj:
                 if field.errors:
                     print(field.errors)
-            print( 'heyheyhey' )
+
             return render_to_response('upload_image.html', {'form': image_obj})
     else:
         return redirect( upload_image_page )
@@ -101,25 +106,30 @@ def signindata(request):
 
     if user:
         login(request, user)
-
         return_to = request.META.get('HTTP_REFERER', False)
         if return_to:
             reobj = re.match(r'.*\?next=(.*)',return_to)
             if reobj:
-                print( reobj.groups(0)[0] )
                 return HttpResponseRedirect(reobj.groups(0)[0])
         
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/home')
     else:
-        return redirect( signin )
+        messages.add_message(request, messages.INFO, 'Wrong Password or Username!')
+        return render(request, 'signin.html')
 
 def signupdata(request):
-
-    u = User.objects.create_user(
-        username=request.POST['username'], 
-        password=request.POST['password'])
-    u.save()
-    login(request, u)
+    if User.objects.filter(username=request.POST['username']).exists():
+        messages.add_message(request, messages.INFO, 'Too slow! Username has been registered!')
+        return render(request, 'signup.html')
+    elif (request.POST['confirm_password']!=request.POST['password']):
+        messages.add_message(request, messages.INFO, 'Idiot! Password must be the same!')
+        return render(request, 'signup.html')
+    else:
+        u = User.objects.create_user(
+            username=request.POST['username'], 
+            password=request.POST['password'])
+        u.save()
+        login(request, u)
 
     return HttpResponseRedirect('/')
 

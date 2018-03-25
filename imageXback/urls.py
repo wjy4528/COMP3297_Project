@@ -33,6 +33,7 @@ urlpatterns = [
     path('image/self', views.my_image, name='my_image'),
     path('image/all/', views.all_image, name='all_image'),
     path('image/search', views.search_image, name='search_image'),
+    path('image/search_category', views.search_category, name='search_category'),
     path('image/upload/page/', views.upload_image_page, name='upload_image_page'),
     path('image/upload/new/', views.upload_image_data, name='upload_image_data'),
     path('signindata', views.signindata, name='signindata'),

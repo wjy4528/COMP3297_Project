@@ -66,40 +66,8 @@
 	</head>
 	<body>
 	
-	<div id="fh5co-offcanvass">
-		<a href="#" class="fh5co-offcanvass-close js-fh5co-offcanvass-close">Menu <i class="icon-cross"></i> </a>
-		<h1 class="fh5co-logo"><a class="navbar-brand" href="index.html">imageX</a></h1>
-		<ul>
-			<li class="active"><a href="#">Home</a></li>
-			<li><a href="about">About</a></li>
-			{% if user.is_authenticated %}
-				<li><a href="/my_profile">My Profile</a></li>
-				<li><a href="/my_image">My Image</a></li>
-				<li><a href="/image/upload/page/">upload</a></li>
-			{% else %}
-				<li><a href="signin">signin</a></li>
-			{% endif %}
-			<li><a href="/signout">Log out</a></li>
-		</ul>
-		<h3 class="fh5co-lead">Connect with us</h3>
-		<p class="fh5co-social-icons">
-			<a href="#"><i class="icon-twitter"></i></a>
-			<a href="#"><i class="icon-facebook"></i></a>
-			<a href="#"><i class="icon-instagram"></i></a>
-			<a href="#"><i class="icon-dribbble"></i></a>
-			<a href="#"><i class="icon-youtube"></i></a>
-		</p>
-	</div>
-	<header id="fh5co-header" role="banner">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-					<a href="#" class="fh5co-menu-btn js-fh5co-menu-btn">Menu <i class="icon-menu"></i></a>
-					<a class="navbar-brand" href="index.html" style="font-size: 40px" >imageX</a>		
-				</div>
-			</div>
-		</div>
-	</header>
+    {% include "./sidebar.html" %}
+
 	<!-- END .header -->
 
 	<div id="fh5co-main">
@@ -131,10 +99,10 @@
 				<form id="search_bar" action="/image/search" method="GET">
 					<input class="search" type="text" size=30 id="search" name="searchstring" placeholder="  Keywords...">
 					<input type="image" src="/static/images/image_ic_search.png" alt="" style=" width:25px; height:25px; position: relative; top : 6px">
-				</form>
+				</form id="sort" action="/sort_result" method="GET">
 				<select style="margin-left: 61%">
-					<option>Sort by Most Recent</option>
-					<option>Sort by Popularity</option>
+					<option value="time">Sort by Most Recent</option>
+					<option value="popularity">Sort by Popularity</option>
 				</select>
 			</div>
 
@@ -151,8 +119,8 @@
 								<p><strong>Like: {{img.likes}} &nbsp&nbsp&nbsp Download: {{img.download}}</strong>
 									</br> Photographer: {{img.uploader}}
 									<!-- </br> Description... -->
-									</br> <strong> {{img.tags}} </strong>
-									</br> <strong> {{img.category}} </strong>
+									</br> <strong> category: {{img.category}} </strong>
+									</br> <strong> tags: {{img.tags}} </strong>
 								</p>
 							</div>
 
@@ -250,9 +218,7 @@
 			</div>
 		</div>
 	</div>
-	
     {% include "./footer.html" %}
-
 	<script>
 		$(".search_cate").click(function(e){
             var search_url = '/image/search?searchstring=' + e.target.innerHTML

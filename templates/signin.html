@@ -109,6 +109,14 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 col-md-offset-2">
+					{% if messages %}
+  						{% for message in messages %}
+						   	<div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+						      <a class="close" data-dismiss="alert" href="#">&times;</a>
+						      {{ message }}
+						    </div>
+						{% endfor %}
+					{% endif %}
 					<h2><strong>Sign In</strong></h2>
 					<div class="fh5co-spacer fh5co-spacer-sm"></div>
 					<form action="/signindata" method="POST">
