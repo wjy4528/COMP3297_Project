@@ -55,6 +55,7 @@
 	<link rel="stylesheet" href="/static/css/salvattore.css">
 	<!-- Theme Style -->
 	<link rel="stylesheet" href="/static/css/style.css">
+	<link rel="stylesheet" href="/static/css/btnfocus.css">
 	<!-- Modernizr JS -->
 	<script src="/static/js/modernizr-2.6.2.min.js"></script>
 	<!-- FOR IE9 below -->
@@ -72,9 +73,9 @@
 			<li class="active"><a href="#">Home</a></li>
 			<li><a href="about">About</a></li>
 			{% if user.is_authenticated %}
-				<li><a href="my_profile">My Profile</a></li>
-				<li><a href="my_image">My Image</a></li>
-				<li><a href="image/upload/page/">upload</a></li>
+				<li><a href="/my_profile">My Profile</a></li>
+				<li><a href="/my_image">My Image</a></li>
+				<li><a href="/image/upload/page/">upload</a></li>
 			{% else %}
 				<li><a href="signin">signin</a></li>
 			{% endif %}
@@ -105,25 +106,25 @@
 		<div class="container">
 			<nav class="navbar navbar-light bg-light" >
   				<form class="form-inline">
-    				<button class="btn btn-outline-success" type="button">Abstract</button>
-    				<button class="btn btn-outline-success" type="button">Aerial</button>
-    				<button class="btn btn-outline-success" type="button">Animals</button>
-    				<button class="btn btn-outline-success" type="button">Architecture</button>
-    				<button class="btn btn-outline-success" type="button">Black and White</button>
-    				<button class="btn btn-outline-success" type="button">Family</button>
-    				<button class="btn btn-outline-success" type="button">Fashion</button>
-    				<button class="btn btn-outline-success" type="button">Fine Art</button>
-    				<button class="btn btn-outline-success" type="button">Journalism</button>
-    				<button class="btn btn-outline-success" type="button">Landscape</button>
-    				<button class="btn btn-outline-success" type="button">Macro</button>
-    				<button class="btn btn-outline-success" type="button">Nature</button>
-    				<button class="btn btn-outline-success" type="button">Night</button>
-    				<button class="btn btn-outline-success" type="button">People</button>
-    				<button class="btn btn-outline-success" type="button">Performing Arts</button>
-    				<button class="btn btn-outline-success" type="button">Sport</button>
-    				<button class="btn btn-outline-success" type="button">Still Life</button>
-    				<button class="btn btn-outline-success" type="button">Street</button>
-    				<button class="btn btn-outline-success" type="button">Travel</button>
+    				<button class="btn search_cate" type="button">Abstract</button>
+    				<button class="btn search_cate" type="button">Aerial</button>
+    				<button class="btn search_cate" type="button">Animals</button>
+    				<button class="btn search_cate" type="button">Architecture</button>
+    				<button class="btn search_cate" type="button">Black and White</button>
+    				<button class="btn search_cate" type="button">Family</button>
+    				<button class="btn search_cate" type="button">Fashion</button>
+    				<button class="btn search_cate" type="button">Fine Art</button>
+    				<button class="btn search_cate" type="button">Journalism</button>
+    				<button class="btn search_cate" type="button">Landscape</button>
+    				<button class="btn search_cate" type="button">Macro</button>
+    				<button class="btn search_cate" type="button">Nature</button>
+    				<button class="btn search_cate" type="button">Night</button>
+    				<button class="btn search_cate" type="button">People</button>
+    				<button class="btn search_cate" type="button">Performing Arts</button>
+    				<button class="btn search_cate" type="button">Sport</button>
+    				<button class="btn search_cate" type="button">Still Life</button>
+    				<button class="btn search_cate" type="button">Street</button>
+    				<button class="btn search_cate" type="button">Travel</button>
   				</form>
 			</nav>
 			<div style="display: flex">
@@ -151,6 +152,7 @@
 									</br> Photographer: {{img.uploader}}
 									<!-- </br> Description... -->
 									</br> <strong> {{img.tags}} </strong>
+									</br> <strong> {{img.category}} </strong>
 								</p>
 							</div>
 
@@ -248,14 +250,15 @@
 			</div>
 		</div>
 	</div>
-
-	<script>
-		var search_cate = function(){
-
-		}
-	</script>
 	
     {% include "./footer.html" %}
 
+	<script>
+		$(".search_cate").click(function(e){
+            var search_url = '/image/search?searchstring=' + e.target.innerHTML
+            window.location.href = search_url
+        });
+	</script>
+    
     </body>
 </html>

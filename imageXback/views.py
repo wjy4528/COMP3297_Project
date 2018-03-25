@@ -29,7 +29,7 @@ def search_image(request):
     search_str = request.GET['searchstring']
     template = loader.get_template('index.html')
     images = models.Image.objects.all().filter( 
-        Q( category=search_str ) | Q( tags__icontains=search_str ) )
+        Q( category=search_str.lower() ) | Q( tags__icontains=search_str ) )
 
     return HttpResponse(template.render({'images':images}, request))
 
@@ -65,9 +65,17 @@ def upload_image_page(request):
 def upload_image_data(request):
 
     if request.method == 'POST':
-        p_dict = dict(request.POST)
-        p_dict['uploader'] = request.user.id
-        p_dict['tags'] = ','.join( p_dict['tags'] )
+
+        try:
+            p_dict = dict(request.POST)
+            p_dict['uploader'] = request.user.id
+            p_dict['tags'] = ','.join( p_dict['tags'] )
+            p_dict['category'] = p_dict['category'][0].lower()
+        except KeyError:
+            return redirect( upload_image_page )
+
+        print( p_dict )
+
         image_obj = models.ImageForm(p_dict, request.FILES)
 
         if image_obj.is_valid():

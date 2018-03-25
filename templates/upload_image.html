@@ -134,25 +134,25 @@
 							<input name='category' type="text" id="category-name-id" style="display: none">
 							<div class="col-md-12 divide-block"> - </div>
 							<!-- <form class="form-inline"> -->
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('Abstract');">Abstract</button>
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('Aerial');">Aerial</button>
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('Animals');">Animals</button>
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('Architecture');">Architecture</button>
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('Black and White');">Black and White</button>
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('Family');">Family</button>
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('Fashion');">Fashion</button>
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('Fine Art');">Fine Art</button>
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('Journalism');">Journalism</button>
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('Landscape');">Landscape</button>
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('Macro');">Macro</button>
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('Nature');">Nature</button>
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('Night');">Night</button>
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('People');">People</button>
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('Performing Arts');">Performing Arts</button>
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('Sport');">Sport</button>
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('Still Life');">Still Life</button>
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('Street');">Street</button>
-								<button class="btn btn-outline-success" type="button" onclick="choose_category('Travel');">Travel</button>
+								<button class="btn add_cate" type="button">Abstract</button>
+								<button class="btn add_cate" type="button">Aerial</button>
+								<button class="btn add_cate" type="button">Animals</button>
+								<button class="btn add_cate" type="button">Architecture</button>
+								<button class="btn add_cate" type="button">Black and White</button>
+								<button class="btn add_cate" type="button">Family</button>
+								<button class="btn add_cate" type="button">Fashion</button>
+								<button class="btn add_cate" type="button">Fine Art</button>
+								<button class="btn add_cate" type="button">Journalism</button>
+								<button class="btn add_cate" type="button">Landscape</button>
+								<button class="btn add_cate" type="button">Macro</button>
+								<button class="btn add_cate" type="button">Nature</button>
+								<button class="btn add_cate" type="button">Night</button>
+								<button class="btn add_cate" type="button">People</button>
+								<button class="btn add_cate" type="button">Performing Arts</button>
+								<button class="btn add_cate" type="button">Sport</button>
+								<button class="btn add_cate" type="button">Still Life</button>
+								<button class="btn add_cate" type="button">Street</button>
+								<button class="btn add_cate" type="button">Travel</button>
 							<!-- </form> -->
 
 							<div class="col-md-3 Category">
@@ -233,14 +233,18 @@
 	<script src="/static/js/main.js"></script>
 
 	<!-- Profile pic upload -->
-	<script src="/static/js/profile_pic.js"></script>	
+	<!-- <script src="/static/js/profile_pic.js"></script>	 -->
 
 	<script  src="/static/js/index.js"></script>
 
 	<script>
-	var choose_category = function(s){
-		$("#category-name-id").val( s );
-	}
+    $(".add_cate").click( function(e){
+        $("#category-name-id").val( e.target.innerHTML )      
+        $(".add_cate").each( function(inx, elem){
+            elem.style.color = ''
+        })
+        e.target.style.color = '#333333'
+    })
 	</script>
 	
 	</body>
