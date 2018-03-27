@@ -7,6 +7,7 @@ import datetime
 from . import models
 
 from django.db.models import Q
+from django.db.models import F
 
 import re
 def index(request):
@@ -25,6 +26,10 @@ def signup(request):
     template = loader.get_template('signup.html')
     return HttpResponse(template.render({}, request))
 
+def update_likes(request,imgID):
+    models.Image.objects.filter(id=imgID).update(likes=F('likes')+1)
+    return HttpResponse(request)
+
 def search_image(request):
     search_str = request.GET['searchstring']
     template = loader.get_template('index.html')
@@ -33,13 +38,6 @@ def search_image(request):
 
     return HttpResponse(template.render({'images':images}, request))
 
-def search_category(request):
-    search_str = 'Family'
-    template = loader.get_template('index.html')
-    images = models.Image.objects.all().filter( 
-        Q( category=search_str ) )
-
-    return HttpResponse(template.render({'images':images}, request))
 
 def my_profile(request):
     template = loader.get_template('my_profile.html')
@@ -57,6 +55,7 @@ def member_image(request, memberID):
     template = loader.get_template('index.html')
     images = models.Image.objects.all().filter( uploader_id=memberID )
     return HttpResponse(template.render({'images':images}, request))
+
 
 @login_required
 def my_image(request):

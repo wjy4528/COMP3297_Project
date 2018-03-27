@@ -24,7 +24,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('home/', views.home, name='home'),
-    
     path('signin/', views.signin, name='signin'),
     path('signup/', views.signup, name='signup'),
     path('signout/', views.signout, name='signout'),
@@ -34,9 +33,9 @@ urlpatterns = [
     path('image/self', views.my_image, name='my_image'),
     path('image/all/', views.all_image, name='all_image'),
     path('image/search', views.search_image, name='search_image'),
-    path('image/search_category', views.search_category, name='search_category'),
     path('image/upload/page/', views.upload_image_page, name='upload_image_page'),
     path('image/upload/new/', views.upload_image_data, name='upload_image_data'),
     path('signindata', views.signindata, name='signindata'),
     path('signupdata', views.signupdata, name='signupdata'),
+    path('api/updatelike/<int:imgID>', views.update_likes, name='update_likes'),
 ]

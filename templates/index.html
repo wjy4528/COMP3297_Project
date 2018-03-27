@@ -57,6 +57,8 @@
 	<link rel="stylesheet" href="/static/css/style.css">
 	<!-- Modernizr JS -->
 	<script src="/static/js/modernizr-2.6.2.min.js"></script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<!-- FOR IE9 below -->
 	<!--[if lt IE 9]>
 	<script src="js/respond.min.js"></script>
@@ -131,7 +133,7 @@
 				<form id="search_bar" action="/image/search" method="GET">
 					<input class="search" type="text" size=30 id="search" name="searchstring" placeholder="  Keywords...">
 					<input type="image" src="/static/images/image_ic_search.png" alt="" style=" width:25px; height:25px; position: relative; top : 6px">
-				</form id="sort" action="/sort_result" method="GET">
+				</form>
 				<select style="margin-left: 61%">
 					<option value="time">Sort by Most Recent</option>
 					<option value="popularity">Sort by Popularity</option>
@@ -148,7 +150,11 @@
 								</a>
 							</div>
 							<div class="fh5co-desc">
-								<p><strong>Like: {{img.likes}} &nbsp&nbsp&nbsp Download: {{img.download}}</strong>
+								<img src="/static/image/heart.jpg">
+								<p><strong onclick="counter({{img.id}})">Like: 
+
+									<span>{{img.likes}} </span>
+									&nbsp&nbsp&nbsp Download: {{img.download}}</strong>
 									</br> Photographer: {{img.uploader}}
 									<!-- </br> Description... -->
 									</br> <strong> #{{img.tags}} </strong>
@@ -256,7 +262,16 @@
 		}
 
 
-		
+		function counter(img){
+			$(this).hide();
+			var $self = this.find('span');
+			console.log($(self).text());
+			console.log($(this).find("span").text());
+			$.get('/api/updatelike/'+img, function(){
+				console.log("ajax sent");
+				$(self).children('span').text(parseInt($(self).children('span').text())+1);
+			});
+		}
 	</script>
 	
     {% include "./footer.html" %}
