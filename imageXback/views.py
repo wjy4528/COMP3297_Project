@@ -10,6 +10,10 @@ from django.db.models import Q
 from django.db.models import F
 
 import re
+
+MAX_UPLOAD_TOTAL = 7
+MAX_UPLOAD_PER_DAY = 3
+
 def index(request):
     return HttpResponse("Hello, world. You're at the imageX index.")
 
@@ -84,10 +88,29 @@ def upload_image_data(request):
         except KeyError:
             return redirect( upload_image_page )
 
+        user_db = models.Member.objects.get(id=request.user.id)
+
+        print( user_db.id )
+
+        if user_db.uploadCount >= MAX_UPLOAD_TOTAL:
+            return HttpResponse("reach limit of total quota")
+
+        today = datetime.datetime.now().date()
+
+        if models.Image.objects.filter(
+                uploader=request.user.id,
+                uploadedOn__gte=today
+            ).count() >= MAX_UPLOAD_PER_DAY:
+            return HttpResponse("reach limit of daily quota")
+
         image_obj = models.ImageForm(p_dict, request.FILES)
 
         if image_obj.is_valid():
             image_obj.save()
+
+            user_db.uploadCount += 1
+            user_db.save()
+
             return HttpResponseRedirect('/')
         else:
             for field in image_obj:
@@ -114,7 +137,7 @@ def signindata(request):
             reobj = re.match(r'.*\?next=(.*)',return_to)
             if reobj:
                 return HttpResponseRedirect(reobj.groups(0)[0])
-        
+
         return HttpResponseRedirect('/home')
     else:
         messages.add_message(request, messages.INFO, 'Wrong Password or Username!')
@@ -127,12 +150,20 @@ def signupdata(request):
     elif (request.POST['confirm_password']!=request.POST['password']):
         messages.add_message(request, messages.INFO, 'Idiot! Password must be the same!')
         return render(request, 'signup.html')
-    else:
-        u = User.objects.create_user(
-            username=request.POST['username'], 
-            password=request.POST['password'])
-        u.save()
-        login(request, u)
+
+    # success scenario
+    u = User.objects.create_user(
+        username=request.POST['username'], 
+        password=request.POST['password'])
+
+    m = models.Member.objects.create(
+        user=u,
+        username=request.POST['username'])
+
+    u.save()
+    m.save()
+
+    login(request, u)
 
     return HttpResponseRedirect('/')
 
