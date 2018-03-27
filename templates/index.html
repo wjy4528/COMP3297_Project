@@ -102,7 +102,8 @@
 					<input class="search" type="text" size=30 id="search" name="searchstring" placeholder="  Keywords...">
 					<input type="image" src="/static/images/image_ic_search.png" alt="" style=" width:25px; height:25px; position: relative; top : 6px">
 				</form>
-				<select style="margin-left: 61%">
+				<select style="margin-left: 61%" onchange="sortByOptions(event)">
+					<option value="none">nothing</option>
 					<option value="time">Sort by Most Recent</option>
 					<option value="popularity">Sort by Popularity</option>
 				</select>
@@ -111,7 +112,7 @@
 			<div class="row">
 				<div id="fh5co-board" data-columns>
 					{% for img in images %}
-						<div class="item">
+						<div class="item" data-upload="{{img.uploadedOn}}" data-like="{{img.likes}}">
 							<div class="animate-box">
 								<a href="/static/media/{{img.imagefile}}" class="image-popup fh5co-board-img" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?">
 									<img src="/static/media/{{img.imagefile}}" alt="">
@@ -120,8 +121,7 @@
 							<div class="fh5co-desc">
 								<img src="/static/image/heart.jpg">
 								<p><strong onclick="counter({{img.id}})">Like: 
-
-									<span>{{img.likes}} </span>
+									<span>{{img.likes}}</span>
 									&nbsp&nbsp&nbsp Download: {{img.download}}</strong>
 									</br> Photographer: {{img.uploader}}
 									<!-- </br> Description... -->
@@ -132,7 +132,7 @@
 
 						</div>
 					{% endfor %}
-
+					<!--
 					<div class="item">
 						<div class="animate-box">
 							<a href="/static/images/img_1.jpg" class="image-popup fh5co-board-img" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?"><img src="/static/images/img_1.jpg" alt="Free HTML5 Bootstrap template"></a>
@@ -206,7 +206,7 @@
 							</div>
 						</div>
 					</div>
-
+					-->
 					<!-- <div class="item"> -->
 						<!-- <div class="animate-box"> -->
 							<!-- <a href="/static/images/img_9.jpg" class="image-popup fh5co-board-img"><img src="/static/images/img_9.jpg" alt="Free HTML5 Bootstrap template"></a> -->
@@ -232,7 +232,6 @@
             window.location.href = search_url
         });
 
-
 		function counter(img){
 			$(this).hide();
 			var $self = this.find('span');
@@ -243,8 +242,33 @@
 				$(self).children('span').text(parseInt($(self).children('span').text())+1);
 			});
 		}
-		
+
+		function sortByOptions(event){
+			var compareFunc;
+			
+			var opt = event.target.options[event.target.selectedIndex].value
+			console.log( opt )
+			if(opt=="time"){
+				compareFunc = function(a,b){
+					return a.dataset.upload > b.dataset.upload;
+				}
+			}else if(opt=="popularity"){
+				compareFunc = function(a,b){
+					return a.dataset.like > b.dataset.like;
+				}
+			}else{
+				return 0;
+			}
+
+			var all_items = document.getElementsByClassName('item')
+			var parent = all_items[0].parentNode
+
+			all_items = Array.prototype.slice.call( all_items )
+			all_items.sort( compareFunc )
+			for( var i=0;i<all_items.length;i++ ){
+				parent.insertBefore( all_items[i], parent.firstChild )
+			}
+		}
 	</script>
-    
     </body>
 </html>
