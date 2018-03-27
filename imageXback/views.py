@@ -34,7 +34,7 @@ def search_image(request):
     search_str = request.GET['searchstring']
     template = loader.get_template('index.html')
     images = models.Image.objects.all().filter( 
-        Q( category=search_str ) | Q( tags__icontains=search_str ) )
+        Q( category=search_str.lower() ) | Q( tags__icontains=search_str ) )
 
     return HttpResponse(template.render({'images':images}, request))
 
@@ -72,11 +72,14 @@ def upload_image_page(request):
 def upload_image_data(request):
 
     if request.method == 'POST':
-        now = datetime.datetime.now()
-        p_dict = dict(request.POST)
-        p_dict['uploader'] = request.user.id
-        p_dict['tags'] = ','.join( p_dict['tags'] )
-        p_dict['update_time'] = now
+        try:
+            p_dict = dict(request.POST)
+            p_dict['uploader'] = request.user.id
+            p_dict['tags'] = ','.join( p_dict['tags'] )
+            p_dict['category'] = p_dict['category'][0].lower()
+        except KeyError:
+            return redirect( upload_image_page )
+
         image_obj = models.ImageForm(p_dict, request.FILES)
 
         if image_obj.is_valid():
@@ -86,7 +89,7 @@ def upload_image_data(request):
             for field in image_obj:
                 if field.errors:
                     print(field.errors)
-            print( 'heyheyhey' )
+
             return render_to_response('upload_image.html', {'form': image_obj})
     else:
         return redirect( upload_image_page )
@@ -102,12 +105,10 @@ def signindata(request):
 
     if user:
         login(request, user)
-
         return_to = request.META.get('HTTP_REFERER', False)
         if return_to:
             reobj = re.match(r'.*\?next=(.*)',return_to)
             if reobj:
-                print( reobj.groups(0)[0] )
                 return HttpResponseRedirect(reobj.groups(0)[0])
         
         return HttpResponseRedirect('/home')

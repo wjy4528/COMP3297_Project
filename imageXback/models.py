@@ -8,7 +8,7 @@ class Image(models.Model):
     download = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
     description = models.CharField(max_length=100)
-    category = models.CharField(max_length=20, default='ABSTRACT')
+    category = models.CharField(max_length=20, default='abstract')
     title = models.CharField(max_length=30)
     lastModified = models.DateField(auto_now_add=True)
     uploadedOn = models.DateField(auto_now_add=True)
