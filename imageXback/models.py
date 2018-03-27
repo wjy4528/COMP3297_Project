@@ -17,9 +17,11 @@ class Image(models.Model):
     uploader = models.ForeignKey(User,on_delete=models.DO_NOTHING)
 
 class Member(models.Model):
-    email = models.EmailField(max_length=50)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default=0)
     username = models.CharField(max_length=50)
-    description = models.CharField(max_length=300)
+    email = models.EmailField(max_length=50, default="null@null")
+    description = models.CharField(max_length=300, null=True)
+    uploadCount = models.IntegerField(default=0)
 
 class ImageForm(forms.ModelForm):
     class Meta:
