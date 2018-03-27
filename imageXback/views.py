@@ -30,6 +30,10 @@ def update_likes(request,imgID):
     models.Image.objects.filter(id=imgID).update(likes=F('likes')+1)
     return HttpResponse(request)
 
+def update_download(request,imgID):
+    models.Image.objects.filter(id=imgID).update(download=F('download')+1)
+    return HttpResponse(request)
+
 def search_image(request):
     search_str = request.GET['searchstring']
     template = loader.get_template('index.html')

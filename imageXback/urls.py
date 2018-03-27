@@ -38,4 +38,5 @@ urlpatterns = [
     path('signindata', views.signindata, name='signindata'),
     path('signupdata', views.signupdata, name='signupdata'),
     path('api/updatelike/<int:imgID>', views.update_likes, name='update_likes'),
+    path('api/update_download/<int:imgID>', views.update_download, name='update_download'),
 ]

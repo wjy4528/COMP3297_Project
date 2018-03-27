@@ -124,9 +124,30 @@
 								</a>
 							</div>
 							<div class="fh5co-desc">
-								<p><strong>Like: {{img.likes}} &nbsp&nbsp&nbsp Download: {{img.download}}</strong>
-									</br> <strong> {{img.tags}} </strong>
+								<p><span class="icon_span" >
+										<strong >
+											<img src="/static/images/heart.png" >
+											&nbsp<span>{{img.likes}}</span>&nbsp
+										</strong>
+										&nbsp&nbsp&nbsp 
+										<strong>
+											<img src="/static/images/download.png" >
+											&nbsp<span>{{img.download}}</span>&nbsp
+										</strong>
+									</span>
+
+									<!-- </br> Description... -->
+									</br> <strong> Category: {{img.category}} </strong>
+									</br> <strong> Tags: {{img.tags}} </strong>
 								</p>
+								<div class="img-button">
+									<div class="delete-form-group">
+										<input type="submit" class="btn btn-primary" value="Edit">
+									</div>
+									<div class="delete-form-group">
+										<input type="submit" class="btn btn-primary" value="Delete">
+									</div>
+								</div>
 							</div>
 
 						</div>
