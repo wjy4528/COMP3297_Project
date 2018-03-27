@@ -11,8 +11,8 @@ from django.db.models import F
 
 import re
 
-MAX_UPLOAD_TOTAL = 700
-MAX_UPLOAD_PER_DAY = 100
+MAX_UPLOAD_TOTAL = 4
+MAX_UPLOAD_PER_DAY = 3
 
 def index(request):
     return HttpResponse("Hello, world. You're at the imageX index.")
@@ -42,7 +42,7 @@ def search_image(request):
     search_str = request.GET['searchstring']
     template = loader.get_template('index.html')
     images = models.Image.objects.all().filter( 
-        Q( category=search_str.lower() ) | Q( tags__icontains=search_str ) )
+        Q( category=search_str.lower() ) | Q( tags__icontains=search_str )  | Q( description__icontains=search_str ) )
 
     return HttpResponse(template.render({'images':images}, request))
 
@@ -88,7 +88,7 @@ def upload_image_data(request):
         try:
             p_dict = dict(request.POST)
             p_dict['uploader'] = request.user.id
-            p_dict['tags'] = ','.join( p_dict['tags'] )
+            p_dict['tags'] = ' '.join( p_dict['tags'] )
             p_dict['category'] = p_dict['category'][0].lower()
             #print(p_dict)
             #print(p_dict['description'])
@@ -97,7 +97,7 @@ def upload_image_data(request):
         except KeyError:
             return redirect( upload_image_page )
 
-
+        '''
         if len(p_dict['tags'])==0:
             p_dict['tags']="None"
 
@@ -106,7 +106,7 @@ def upload_image_data(request):
 
         if len(p_dict['category'])==0:
             p_dict['category']="None"
-
+        '''
         if p_dict['tags'].count(' ')>9:
             messages.add_message(request, messages.INFO, 'You can select at most ten tags!')
             return render(request, 'upload_image.html')
@@ -116,7 +116,8 @@ def upload_image_data(request):
             print( user_db.id )
 
             if user_db.uploadCount >= MAX_UPLOAD_TOTAL:
-                return HttpResponse("reach limit of total quota")
+                messages.add_message(request, messages.INFO, 'You have reached your total upload limitation!')
+                return render(request, 'upload_image.html')
 
             today = datetime.datetime.now().date()
 
@@ -124,7 +125,8 @@ def upload_image_data(request):
                     uploader=request.user.id,
                     uploadedOn__gte=today
                 ).count() >= MAX_UPLOAD_PER_DAY:
-                return HttpResponse("reach limit of daily quota")
+                messages.add_message(request, messages.INFO, 'You have reached your daily upload limitation!')
+                return render(request, 'upload_image.html')
 
             image_obj = models.ImageForm(p_dict, request.FILES)
 
@@ -177,7 +179,7 @@ def signupdata(request):
         messages.add_message(request, messages.INFO, 'Too slow! Username has been registered!')
         return render(request, 'signup.html')
     elif (request.POST['confirm_password']!=request.POST['password']):
-        messages.add_message(request, messages.INFO, 'Idiot! Password must be the same!')
+        messages.add_message(request, messages.INFO, 'Password must be the same!')
         return render(request, 'signup.html')
 
     # success scenario

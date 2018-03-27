@@ -115,7 +115,7 @@
 						<div class="item" data-upload="{{img.uploadedOn}}" data-like="{{img.likes}}" style="height: 380px">
 							<div class="animate-box">
 								<a href="/static/media/{{img.imagefile}}" class="image-popup fh5co-board-img" title={{img.description}}>
-									<img src="/static/media/{{img.imagefile}}" alt="">
+									<img src="/static/media/{{img.imagefile}}" alt="" style="height: 180px">
 								</a>
 							</div>
 							<div class="fh5co-desc">
@@ -134,9 +134,15 @@
 									</span>
 									</br> <strong> Photographer: </strong> {{img.uploader}} 
 									<!-- </br> Description... -->
+									{% if img.category %}
 									</br> <strong> Category: </strong> {{img.category}} 
+									{% endif %}
+									{% if img.tags %}
 									</br> <strong> Tags:  </strong> {{img.tags}} 
+									{% endif %}
+									{% if img.description %}
 									</br> <strong> Descrption: </strong> {{img.description}}
+									{% endif %}
 								</p>
 							</div>
 
@@ -261,7 +267,7 @@
 				}
 			}else if(opt=="popularity"){
 				compareFunc = function(a,b){
-					return a.dataset.like < b.dataset.like;
+					return b.dataset.like - a.dataset.like;
 				}
 			}else{
 				return 0;
