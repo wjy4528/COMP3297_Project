@@ -8321,4 +8321,17 @@ a > img.fh5co-align-center {
   margin-right: auto;
 }
 
+.icon_span {
+  display: flex
+}
+
+.icon_span strong{
+  display: flex
+}
+
+.icon_span img{
+  height:20px;
+  width: 20px;
+}
+
 /*# sourceMappingURL=style.css.map */

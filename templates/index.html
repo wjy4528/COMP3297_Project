@@ -124,9 +124,21 @@
 									<span>{{img.likes}}</span>
 									&nbsp&nbsp&nbsp Download: {{img.download}}</strong>
 									</br> Photographer: {{img.uploader}}
+								<p><span class="icon_span" >
+										<strong >
+											<img src="/static/images/heart.png" onclick="add_likes(event)" data-imgid={{img.id}}>
+											&nbsp<span>{{img.likes}}</span>&nbsp
+										</strong>
+										&nbsp&nbsp&nbsp 
+										<strong>
+											<img src="/static/images/download.png" onclick="add_download(event)" data-imgid={{img.id}}>
+											&nbsp<span>{{img.download}}</span>&nbsp
+										</strong>
+									</span>
+									</br> <strong> Photographer: {{img.uploader}} </strong>
 									<!-- </br> Description... -->
-									</br> <strong> category: {{img.category}} </strong>
-									</br> <strong> tags: {{img.tags}} </strong>
+									</br> <strong> Category: {{img.category}} </strong>
+									</br> <strong> Tags: {{img.tags}} </strong>
 								</p>
 							</div>
 
@@ -232,14 +244,11 @@
             window.location.href = search_url
         });
 
-		function counter(img){
-			$(this).hide();
-			var $self = this.find('span');
-			console.log($(self).text());
-			console.log($(this).find("span").text());
+		function add_likes(event){
+			x=event.target;
+			img=x.dataset.imgid;
+			x.parentElement.children[1].textContent=(parseInt(x.parentElement.children[1].textContent)+1);
 			$.get('/api/updatelike/'+img, function(){
-				console.log("ajax sent");
-				$(self).children('span').text(parseInt($(self).children('span').text())+1);
 			});
 		}
 
@@ -269,6 +278,16 @@
 				parent.insertBefore( all_items[i], parent.firstChild )
 			}
 		}
+
+		function add_download(event){
+			x=event.target;
+			img=x.dataset.imgid;
+			x.parentElement.children[1].textContent=(parseInt(x.parentElement.children[1].textContent)+1);
+			$.get('/api/update_download/'+img, function(){
+				
+			});
+		}
+
 	</script>
     </body>
 </html>
