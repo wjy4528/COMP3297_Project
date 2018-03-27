@@ -67,15 +67,56 @@
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
 
-	</head>
-	<body>
-    {% include "./sidebar.html" %}
+		</head>
+		<body>
+			    <div id="fh5co-offcanvass">
+			    <a href="#" class="fh5co-offcanvass-close js-fh5co-offcanvass-close">Menu <i class="icon-cross"></i> </a>
+			    <h1 class="fh5co-logo"><a class="navbar-brand" href="/">imageX</a></h1>
+			    <ul>
+			        <li><a href="/">Home</a></li>
+			        {% if user.is_authenticated %}
+			            <li><a href="/my_profile">My Profile</a></li>
+			            <li><a href="/image/self">My Image</a></li>
+			            <li><a href="/signout">Log Out</a></li>
+			        {% endif %}
+			        
+			    </ul>
+			    <h3 class="fh5co-lead">Connect with us</h3>
+			    <p class="fh5co-social-icons">
+			        <a href="#"><i class="icon-twitter"></i></a>
+			        <a href="#"><i class="icon-facebook"></i></a>
+			        <a href="#"><i class="icon-instagram"></i></a>
+			        <a href="#"><i class="icon-dribbble"></i></a>
+			        <a href="#"><i class="icon-youtube"></i></a>
+			    </p>
+			</div>
+
+			<header id="fh5co-header" role="banner">
+			    <div class="container">
+			        <div class="row">
+			            <div class="col-md-12">
+			                <a href="#" class="fh5co-menu-btn js-fh5co-menu-btn">Menu <i class="icon-menu"></i></a>
+			                <a class="navbar-brand" href="/" style="font-size: 40px" >imageX</a>		
+			            </div>
+			        </div>
+			    </div>
+			</header>
+	
 	<div id="fh5co-main">
 		<div class="container">
 			<div class="row">
+				
 				<form action="/image/upload/new/" method="POST" enctype="multipart/form-data">
 					{% csrf_token %}
 					<div class="col-md-8 col-md-offset-2">
+						{% if messages %}
+	  						{% for message in messages %}
+							   	<div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+							      <a class="close" data-dismiss="alert" href="#">&times;</a>
+							      {{ message }}
+							    </div>
+							{% endfor %}
+						{% endif %}
 						<h2><strong>Upload Image</strong></h2>
 						<div class="fh5co-spacer fh5co-spacer-sm"></div>
 					<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
@@ -96,6 +137,7 @@
 					  </div>
 					</div>
 						<div class="row">
+
 							<div class="col-md-3 Category">
 								<div class="profile_name">Select a Category : </div>
 							</div>
@@ -136,7 +178,7 @@
 							</div>
 							<div class="col-md-12">
 								<div class="form-group">
-									<textarea name="description" id="message" cols="30" class="form-control intro_box" rows="10" >Type your description here...</textarea>
+									<textarea name="description" id="message" cols="30" class="form-control intro_box" rows="10" placeholder="Type your description here..."></textarea>
 								</div>
 							</div>
 							<div class="col-md-12">
@@ -148,7 +190,6 @@
 					</div>
 				
 				</form>
-				
 				{% if form.errors %}
 					{% for field in form %}
 						{% for error in field.errors %}

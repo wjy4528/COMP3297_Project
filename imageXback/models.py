@@ -7,8 +7,8 @@ from . import settings
 class Image(models.Model):
     download = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
-    description = models.CharField(max_length=100)
-    category = models.CharField(max_length=20, default='abstract')
+    description = models.CharField(max_length=100, default='NONE')
+    category = models.CharField(max_length=20, default='NONE')
     title = models.CharField(max_length=30)
     lastModified = models.DateField(auto_now_add=True)
     uploadedOn = models.DateField(auto_now_add=True)
@@ -26,4 +26,4 @@ class Member(models.Model):
 class ImageForm(forms.ModelForm):
     class Meta:
         model = Image
-        fields = ['tags', 'description', 'imagefile', 'uploader', 'category']
+        fields = ['tags', 'description','imagefile', 'uploader', 'category']

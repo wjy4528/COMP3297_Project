@@ -98,12 +98,12 @@
   				</form>
 			</nav>
 			<div style="display: flex">
-				<form id="search_bar" action="/image/search" method="GET">
-					<input class="search" type="text" size=30 id="search" name="searchstring" placeholder="  Keywords...">
-					<input type="image" src="/static/images/image_ic_search.png" alt="" style=" width:25px; height:25px; position: relative; top : 6px">
+				<form id="search_bar" action="/image/search" method="GET" >
+					<input class="search" type="text" size=30 id="search" name="searchstring" placeholder="  Keywords..." style="border: 5px">
+					<input type="image" src="/static/images/image_ic_search.png" alt="" style=" width:25px; height:25px;position: relative; top : 6px">
 				</form>
-				<select style="margin-left: 61%" onchange="sortByOptions(event)">
-					<option value="none">nothing</option>
+				<select style="margin-left: 62%; height: 100%" onchange="sortByOptions(event)">
+					<option value="none">Default Sorting</option>
 					<option value="time">Sort by Most Recent</option>
 					<option value="popularity">Sort by Popularity</option>
 				</select>
@@ -112,18 +112,15 @@
 			<div class="row">
 				<div id="fh5co-board" data-columns>
 					{% for img in images %}
-						<div class="item" data-upload="{{img.uploadedOn}}" data-like="{{img.likes}}">
+						<div class="item" data-upload="{{img.uploadedOn}}" data-like="{{img.likes}}" style="height: 380px">
 							<div class="animate-box">
-								<a href="/static/media/{{img.imagefile}}" class="image-popup fh5co-board-img" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?">
+								<a href="/static/media/{{img.imagefile}}" class="image-popup fh5co-board-img" title={{img.description}}>
 									<img src="/static/media/{{img.imagefile}}" alt="">
 								</a>
 							</div>
 							<div class="fh5co-desc">
-								<img src="/static/image/heart.jpg">
-								<p><strong onclick="counter({{img.id}})">Like: 
-									<span>{{img.likes}}</span>
-									&nbsp&nbsp&nbsp Download: {{img.download}}</strong>
-									</br> Photographer: {{img.uploader}}
+								
+							
 								<p><span class="icon_span" >
 										<strong >
 											<img src="/static/images/heart.png" onclick="add_likes(event)" data-imgid={{img.id}}>
@@ -135,10 +132,11 @@
 											&nbsp<span>{{img.download}}</span>&nbsp
 										</strong>
 									</span>
-									</br> <strong> Photographer: {{img.uploader}} </strong>
+									</br> <strong> Photographer: </strong> {{img.uploader}} 
 									<!-- </br> Description... -->
-									</br> <strong> Category: {{img.category}} </strong>
-									</br> <strong> Tags: {{img.tags}} </strong>
+									</br> <strong> Category: </strong> {{img.category}} 
+									</br> <strong> Tags:  </strong> {{img.tags}} 
+									</br> <strong> Descrption: </strong> {{img.description}}
 								</p>
 							</div>
 
@@ -263,20 +261,41 @@
 				}
 			}else if(opt=="popularity"){
 				compareFunc = function(a,b){
-					return a.dataset.like > b.dataset.like;
+					return a.dataset.like < b.dataset.like;
 				}
 			}else{
 				return 0;
 			}
 
 			var all_items = document.getElementsByClassName('item')
-			var parent = all_items[0].parentNode
-
-			all_items = Array.prototype.slice.call( all_items )
-			all_items.sort( compareFunc )
-			for( var i=0;i<all_items.length;i++ ){
-				parent.insertBefore( all_items[i], parent.firstChild )
+			var all_parent = document.getElementsByClassName('column')
+			for (var i=0;i<4;i++){
+				console.log(all_parent[i])
 			}
+			
+			if (all_items.length <= 4){
+				var parent = all_items[0].parentNode
+				parent.style.display="-webkit-inline-box"
+				all_items = Array.prototype.slice.call( all_items )
+				all_items.sort( compareFunc )
+
+				for( var i=0;i<all_items.length;i++ ){
+					parent.insertBefore( all_items[i], parent.firstChild )
+				}
+
+			}else{
+				all_items = Array.prototype.slice.call( all_items )
+				all_items.sort( compareFunc )
+				for( var i=0;i<all_items.length;i++ ){
+					console.log(all_items[i])
+					var res=i%4
+					console.log(all_parent[res])
+					all_parent[res].appendChild( all_items[i] )
+				}
+				
+			}
+			
+
 		}
 
 		function add_download(event){
