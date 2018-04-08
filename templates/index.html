@@ -128,8 +128,10 @@
 										</strong>
 										&nbsp&nbsp&nbsp 
 										<strong>
-											<img src="/static/images/download.png" onclick="add_download(event)" data-imgid={{img.id}}>
-											&nbsp<span>{{img.download}}</span>&nbsp
+											<a href="/image/download/data/{{img.id}}" style="text-decoration: none" download>
+												<img src="/static/images/download.png" onclick="add_download(event)" data-imgid={{img.id}}>
+												&nbsp<span>{{img.download}}</span>&nbsp
+											</a>
 										</strong>
 									</span>
 									</br> <strong> Photographer: </strong> {{img.uploader}} 
@@ -241,6 +243,8 @@
 		</div>
 	</div>
     {% include "./footer.html" %}
+	
+	<!--
 	<script>
 
 		$(".search_cate").click(function(e){
@@ -263,11 +267,11 @@
 			console.log( opt )
 			if(opt=="time"){
 				compareFunc = function(a,b){
-					return a.dataset.upload > b.dataset.upload;
+					return a.dataset.upload - b.dataset.upload;
 				}
 			}else if(opt=="popularity"){
 				compareFunc = function(a,b){
-					return b.dataset.like - a.dataset.like;
+					return a.dataset.like - b.dataset.like;
 				}
 			}else{
 				return 0;
@@ -308,11 +312,16 @@
 			x=event.target;
 			img=x.dataset.imgid;
 			x.parentElement.children[1].textContent=(parseInt(x.parentElement.children[1].textContent)+1);
+			
+			/*
 			$.get('/api/update_download/'+img, function(){
 				
 			});
+			*/
 		}
 
 	</script>
+	
+	-->
     </body>
 </html>
