@@ -82,26 +82,26 @@ def delete_image_page(request, imgID):
     models.Image.objects.all().filter( id=imgID ).delete()
     return HttpResponseRedirect('/')
 
-def delete_image_data(request):
-    imgID = request.DEL['imgid']
-    img = models.Image.objects.all().filter( id=imgID, uploader_id=request.user.id )
-    if len(img) == 1:
+def delete_image_data(request, imgID):
 
-        img.delete()
+    try:
+        img = models.Image.objects.all().get( id=imgID, uploader_id=request.user.id )
+    except models.TokenInfo.DoesNotExist:
+        messages.add_message(request, messages.INFO, 
+            'email does not exists.')
+        return HttpResponseRedirect('/image/self')
+    except models.TokenInfo.MultipleObjectsReturned:
+        messages.add_message(request, messages.INFO, 
+            'Multiple user found for this email.')
+        return HttpResponseRedirect('/image/self')
 
-        user_db = models.Member.objects.all().filter(user=request.user)
-        user_db.uploadCount += 1
-        user_db.save()
+    img.delete()
 
-        return HttpResponseRedirect('/')
+    user_db = models.Member.objects.all().get(user=request.user)
+    user_db.uploadCount += 1
+    user_db.save()
 
-    elif len(img) == 0:
-        return HttpResponseRedirect('/')
-    else:
-        err_str = """the imageID and user ID mapped to mode than one image...
-                        imageID : {}
-                        UserID : {}"""
-        raise ValueError(err_str.format(imgID, request.user.id))
+    return HttpResponseRedirect('/image/self')
 
 def token_generate_new(request):
     email = request.POST.get('email', False)
@@ -202,7 +202,7 @@ def password_change_set(request):
 def my_image(request):
     template = loader.get_template('my_image.html')
     images = models.Image.objects.all().filter( uploader_id=request.user.id )
-    return HttpResponse(template.render({'images':images}, request))
+    return HttpResponse(template.render({'images':images,'my_own_pic':True}, request))
 
 @login_required
 def upload_image_page(request):
