@@ -11,8 +11,8 @@ from django.db.models import F
 
 import re
 
-MAX_UPLOAD_TOTAL = 4
-MAX_UPLOAD_PER_DAY = 3
+MAX_UPLOAD_TOTAL = 40
+MAX_UPLOAD_PER_DAY = 30
 
 def index(request):
     return HttpResponse("Hello, world. You're at the imageX index.")
