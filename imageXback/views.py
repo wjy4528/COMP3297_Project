@@ -5,14 +5,28 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import datetime
 from . import models
+from . import sendmail
+from . import settings
 
 from django.db.models import Q
 from django.db.models import F
 
 import re
+import os
+import random
+import string
+import mimetypes
 
 MAX_UPLOAD_TOTAL = 40
 MAX_UPLOAD_PER_DAY = 30
+
+BASE64_string = string.ascii_letters + string.digits + '/.'
+
+def get_token(sz=16):
+    return ''.join( random.choices(BASE64_string, k=sz) )
+
+def generate_password(sz=8):
+    return get_token(sz=8)
 
 def index(request):
     return HttpResponse("Hello, world. You're at the imageX index.")
@@ -46,7 +60,6 @@ def search_image(request):
 
     return HttpResponse(template.render({'images':images}, request))
 
-
 def my_profile(request):
     template = loader.get_template('my_profile.html')
     return HttpResponse(template.render({}, request))
@@ -64,17 +77,132 @@ def member_image(request, memberID):
     images = models.Image.objects.all().filter( uploader_id=memberID )
     return HttpResponse(template.render({'images':images}, request))
 
-def delete_image(request, imgID):
+def delete_image_page(request, imgID):
     #template = loader.get_template('index.html')
     models.Image.objects.all().filter( id=imgID ).delete()
-    return HttpResponse(request)
+    return HttpResponseRedirect('/')
 
+def delete_image_data(request, imgID):
+
+    try:
+        img = models.Image.objects.all().get( id=imgID, uploader_id=request.user.id )
+    except models.TokenInfo.DoesNotExist:
+        messages.add_message(request, messages.INFO, 
+            'email does not exists.')
+        return HttpResponseRedirect('/image/self')
+    except models.TokenInfo.MultipleObjectsReturned:
+        messages.add_message(request, messages.INFO, 
+            'Multiple user found for this email.')
+        return HttpResponseRedirect('/image/self')
+
+    img.delete()
+
+    user_db = models.Member.objects.all().get(user=request.user)
+    user_db.uploadCount += 1
+    user_db.save()
+
+    return HttpResponseRedirect('/image/self')
+
+def token_generate_new(request):
+    email = request.POST.get('email', False)
+
+    if not email:
+        return HttpResponse('email must be supplied')
+
+    token = get_token()
+
+    ti = models.TokenInfo.objects.create(
+        email=email,
+        token=token)
+    ti.save()
+
+    title = 'ImageX Token'
+    content = 'you token is :\n{}'.format(token)
+    f = sendmail.email_from
+    sendmail.send_email(title,content,f,email)
+
+    return HttpResponseRedirect('/token/generate/page')
+
+def token_generate_page(request):
+    template = loader.get_template('gen_token.html')
+    return HttpResponse(template.render({}, request))
+
+@login_required
+def download_image_data(request, imgID):
+    # imgID = imgID
+    img = models.Image.objects.all().get(id=imgID)
+    img_p = os.path.join( settings.MEDIA_ROOT, str(img.imagefile) )
+
+    with open(img_p, 'rb') as fp:
+        response = HttpResponse(fp.read())
+        file_type, encoding = mimetypes.guess_type(img_p)
+
+        if file_type is None:
+            file_type = 'application/octet-stream'
+
+        if encoding is not None:
+            response['Content-Encoding'] = encoding
+
+        response['Content-Type'] = file_type
+        response['Content-Length'] = str(os.stat(img_p).st_size)
+
+    models.Image.objects.filter(id=imgID).update(download=F('download')+1)
+    return response
+
+def password_forget_page(request):
+    template = loader.get_template('password_forget.html')
+    return HttpResponse(template.render({}, request))
+
+def password_forget_reset(request):
+    email = request.POST['email']
+
+    try:
+        m_db = models.Member.objects.get(email=email)
+    except models.TokenInfo.DoesNotExist:
+        messages.add_message(request, messages.INFO, 
+            'email does not exists.')
+        return render(request, 'signup.html')
+    except models.TokenInfo.MultipleObjectsReturned:
+        messages.add_message(request, messages.INFO, 
+            'Multiple user found for this email.')
+        return render(request, 'signup.html')
+
+    new_passwd = generate_password()
+
+    u = m_db.user
+    u.set_password(new_passwd)
+    u.save()
+
+    msg = 'you password has been reset to {}'.format(new_passwd)
+    title = 'ImageX Password Reset'
+    sendmail.send_email(title, msg, sendmail.email_from, email)
+
+    return HttpResponseRedirect('/signin')
+
+def password_change_page(request):
+    template = loader.get_template('password_change.html')
+    return HttpResponse(template.render({}, request))
+
+@login_required
+def password_change_set(request):
+    new_passwd = request.POST['password']
+    assert isinstance(new_passwd, str)
+    request.user.set_password(new_passwd)
+    request.user.save()
+
+    user = authenticate(
+        username=request.user.username,
+        password=new_passwd)
+
+    login(request, user)
+
+    return HttpResponseRedirect('/')
 
 @login_required
 def my_image(request):
     template = loader.get_template('my_image.html')
     images = models.Image.objects.all().filter( uploader_id=request.user.id )
-    return HttpResponse(template.render({'images':images}, request))
+    return HttpResponse(template.render({'images':images,'my_own_pic':True}, request))
 
 @login_required
 def upload_image_page(request):
@@ -111,7 +239,7 @@ def upload_image_data(request):
             messages.add_message(request, messages.INFO, 'You can select at most ten tags!')
             return render(request, 'upload_image.html')
         else:
-            user_db = models.Member.objects.get(id=request.user.id)
+            user_db = models.Member.objects.get(user=request.user)
 
             print( user_db.id )
 
@@ -175,11 +303,29 @@ def signindata(request):
         return render(request, 'signin.html')
 
 def signupdata(request):
+
+    token = request.POST['token']
+
+    try:
+        t_obj = models.TokenInfo.objects.get(token=token)
+    except models.TokenInfo.DoesNotExist:
+        messages.add_message(request, messages.INFO, 
+            'Token does not exists.')
+        return render(request, 'signup.html')
+    except models.TokenInfo.MultipleObjectsReturned:
+        messages.add_message(request, messages.INFO, 
+            'Multiple emails found for this token.')
+        return render(request, 'signup.html')
+
+    email = t_obj.email
+
     if User.objects.filter(username=request.POST['username']).exists():
-        messages.add_message(request, messages.INFO, 'Too slow! Username has been registered!')
+        messages.add_message(request, messages.INFO, 
+            'Too slow! Username has been registered!')
         return render(request, 'signup.html')
     elif (request.POST['confirm_password']!=request.POST['password']):
-        messages.add_message(request, messages.INFO, 'Password must be the same!')
+        messages.add_message(request, messages.INFO, 
+            'Password must be the same!')
         return render(request, 'signup.html')
 
     # success scenario
@@ -187,11 +333,14 @@ def signupdata(request):
         username=request.POST['username'], 
         password=request.POST['password'])
 
+    u.save()
+    print( 'userId : {}'.format( u.id ) )
+
     m = models.Member.objects.create(
         user=u,
+        email=email,
         username=request.POST['username'])
 
-    u.save()
     m.save()
 
     login(request, u)

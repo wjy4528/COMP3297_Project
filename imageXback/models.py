@@ -17,9 +17,9 @@ class Image(models.Model):
     uploader = models.ForeignKey(User,on_delete=models.DO_NOTHING)
 
 class Member(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, default=0)
-    username = models.CharField(max_length=50)
-    email = models.EmailField(max_length=50, default="null@null")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
+    username = models.CharField(max_length=50, unique=True)
+    email = models.EmailField(max_length=50, default="null@null", unique=True)
     description = models.CharField(max_length=300, null=True)
     uploadCount = models.IntegerField(default=0)
 
@@ -30,3 +30,7 @@ class ImageForm(forms.ModelForm):
     class Meta:
         model = Image
         fields = ['tags', 'description','imagefile', 'uploader', 'category']
+
+class TokenInfo(models.Model):
+    email = models.EmailField(max_length=50, default="null@null")
+    token = models.CharField(max_length=16, primary_key=True)

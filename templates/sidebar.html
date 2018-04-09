@@ -5,8 +5,9 @@
         <li><a href="/">Home</a></li>
         {% if user.is_authenticated %}
             <li><a href="/my_profile">My Profile</a></li>
-            <li><a href="/image/self">My Image</a></li>
+            <li><a href="/image/self">My Images</a></li>
             <li><a href="/image/upload/page/">Upload Image</a></li>
+            <li><a href="/password/change/page/">Change Password</a></li>
             <li><a href="/signout">Log Out</a></li>
         {% else %}
             <li><a href="/signin">Sign In</a></li>

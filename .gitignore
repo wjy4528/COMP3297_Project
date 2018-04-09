@@ -2,6 +2,10 @@
 /stored_images/
 /static/media/
 /imageXback/migrations
+/emailfiles/
+
+# pylint stuff
+.pylintrc
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
