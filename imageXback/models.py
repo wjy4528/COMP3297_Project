@@ -9,7 +9,7 @@ class Image(models.Model):
     likes = models.IntegerField(default=0)
     description = models.CharField(max_length=100, null=True)
     category = models.CharField(max_length=20, null=True)
-    title = models.CharField(max_length=30)
+    title = models.CharField(max_length=30, null=True)
     lastModified = models.DateField(auto_now_add=True)
     uploadedOn = models.DateField(auto_now_add=True)
     imagefile = models.FileField()
@@ -27,9 +27,11 @@ class ImageForm(forms.ModelForm):
     tags = forms.CharField(required=False)
     category = forms.CharField(required=False)
     description = forms.CharField(required=False)
+    title = forms.CharField(required=True)
+
     class Meta:
         model = Image
-        fields = ['tags', 'description','imagefile', 'uploader', 'category']
+        fields = ['tags', 'description','imagefile', 'uploader', 'category','title']
 
 class TokenInfo(models.Model):
     email = models.EmailField(max_length=50, default="null@null")

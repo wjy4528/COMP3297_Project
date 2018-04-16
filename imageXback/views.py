@@ -23,7 +23,7 @@ MAX_UPLOAD_PER_DAY = 30
 BASE64_string = string.ascii_letters + string.digits + '/.'
 
 def get_token(sz=16):
-    return ''.join( random.choices(BASE64_string, k=sz) )
+    return ''.join([random.choice(BASE64_string) for _ in range(sz)])
 
 def generate_password(sz=8):
     return get_token(sz=8)
@@ -98,7 +98,7 @@ def delete_image_data(request, imgID):
     img.delete()
 
     user_db = models.Member.objects.all().get(user=request.user)
-    user_db.uploadCount += 1
+    user_db.uploadCount -= 1
     user_db.save()
 
     return HttpResponseRedirect('/image/self')
@@ -217,6 +217,7 @@ def upload_image_data(request):
             p_dict = dict(request.POST)
             p_dict['uploader'] = request.user.id
             p_dict['tags'] = ' '.join( p_dict['tags'] )
+            p_dict['title'] = ' '.join( p_dict['title'] )
             p_dict['category'] = p_dict['category'][0].lower()
             #print(p_dict)
             #print(p_dict['description'])
@@ -323,9 +324,17 @@ def signupdata(request):
         messages.add_message(request, messages.INFO, 
             'Too slow! Username has been registered!')
         return render(request, 'signup.html')
-    elif (request.POST['confirm_password']!=request.POST['password']):
+    elif (request.POST['confirm_password'] != request.POST['password']):
         messages.add_message(request, messages.INFO, 
             'Password must be the same!')
+        return render(request, 'signup.html')
+    elif (len(request.POST['confirm_password']) == 0 ):
+        messages.add_message(request, messages.INFO, 
+            'Password cannot be empty')
+        return render(request, 'signup.html')
+    elif (len(request.POST['username']) == 0):
+        messages.add_message(request, messages.INFO, 
+            'Username cannot be empty')
         return render(request, 'signup.html')
 
     # success scenario

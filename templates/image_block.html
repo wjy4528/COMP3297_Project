@@ -23,18 +23,21 @@
 							<img src="/static/images/delete.png" onclick="" data-imgid={{img.id}}>
 						</a>
 					</strong>
-				{% else %}
-					</br> <strong> Photographer: </strong> {{img.uploader}} 
 				{% endif %}
 			</span>
 
 
 			<!-- </br> Description... -->
+			</br> <strong> Photographer: </strong> {{img.uploader}} 
+
 			{% if img.category %}
 				</br> <strong> Category: </strong> {{img.category}} 
 			{% endif %}
 			{% if img.tags %}
 				</br> <strong> Tags:  </strong> {{img.tags}} 
+			{% endif %}
+			{% if img.title %}
+				</br> <strong> Title:  </strong> {{img.title}} 
 			{% endif %}
 			{% if img.description %}
 				</br> <strong> Descrption: </strong> {{img.description}}
