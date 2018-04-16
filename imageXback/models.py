@@ -33,6 +33,11 @@ class ImageForm(forms.ModelForm):
         model = Image
         fields = ['tags', 'description','imagefile', 'uploader', 'category','title']
 
-class TokenInfo(models.Model):
+class register_Token(models.Model):
     email = models.EmailField(max_length=50, default="null@null")
-    token = models.CharField(max_length=16, primary_key=True)
+    token = models.CharField(max_length=32, primary_key=True)
+
+class reset_Token(models.Model):
+    email = models.EmailField(max_length=50, default="null@null")
+    token = models.CharField(max_length=32, primary_key=True)
+    username = models.CharField(max_length=50)

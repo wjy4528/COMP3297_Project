@@ -20,9 +20,9 @@ import mimetypes
 MAX_UPLOAD_TOTAL = 40
 MAX_UPLOAD_PER_DAY = 30
 
-BASE64_string = string.ascii_letters + string.digits + '/.'
+BASE64_string = string.ascii_letters + string.digits + '+.'
 
-def get_token(sz=16):
+def get_token(sz=32):
     return ''.join([random.choice(BASE64_string) for _ in range(sz)])
 
 def generate_password(sz=8):
@@ -86,11 +86,11 @@ def delete_image_data(request, imgID):
 
     try:
         img = models.Image.objects.all().get( id=imgID, uploader_id=request.user.id )
-    except models.TokenInfo.DoesNotExist:
+    except models.Image.DoesNotExist:
         messages.add_message(request, messages.INFO, 
             'email does not exists.')
         return HttpResponseRedirect('/image/self')
-    except models.TokenInfo.MultipleObjectsReturned:
+    except models.Image.MultipleObjectsReturned:
         messages.add_message(request, messages.INFO, 
             'Multiple user found for this email.')
         return HttpResponseRedirect('/image/self')
@@ -111,7 +111,7 @@ def token_generate_new(request):
 
     token = get_token()
 
-    ti = models.TokenInfo.objects.create(
+    ti = models.register_Token.objects.create(
         email=email,
         token=token)
     ti.save()
@@ -149,33 +149,67 @@ def download_image_data(request, imgID):
     models.Image.objects.filter(id=imgID).update(download=F('download')+1)
     return response
 
-def password_forget_page(request):
-    template = loader.get_template('password_forget.html')
-    return HttpResponse(template.render({}, request))
+def password_forget_email(request):
+    template = loader.get_template('password_forget_email.html')
+    return HttpResponse(template.render({}, request))    
 
-def password_forget_reset(request):
+def password_forget_req(request):
     email = request.POST['email']
 
     try:
         m_db = models.Member.objects.get(email=email)
-    except models.TokenInfo.DoesNotExist:
+    except models.Member.DoesNotExist:
         messages.add_message(request, messages.INFO, 
             'email does not exists.')
         return render(request, 'signup.html')
-    except models.TokenInfo.MultipleObjectsReturned:
+    except models.Member.MultipleObjectsReturned:
         messages.add_message(request, messages.INFO, 
             'Multiple user found for this email.')
         return render(request, 'signup.html')
 
-    new_passwd = generate_password()
+    passwd_token = get_token()
+
+    ti = models.reset_Token.objects.create(
+        email=email,
+        token=passwd_token,
+        username=m_db.username)
+    ti.save()
+
+    title = 'ImageX Password Reset'
+    link = 'password/forget/page/{}'.format(passwd_token)
+    content = 'Please visit the following link to reset you password:\n{}'.format(link)
+    f = sendmail.email_from
+    sendmail.send_email(title,content,f,email)
+
+    return HttpResponseRedirect('/signin')
+
+def password_forget_page(request, token):
+
+    t_obj = models.reset_Token.objects.get(token=token)
+    u = t_obj.username
+    t_obj.delete()
+
+    template = loader.get_template('password_forget_page.html')
+    return HttpResponse(template.render({'username':u}, request))
+
+def password_forget_reset(request):
+    username = request.POST['username']
+    password = request.POST['password']
+
+    try:
+        m_db = models.Member.objects.get(username=username)
+    except models.Member.DoesNotExist:
+        messages.add_message(request, messages.INFO, 
+            'username does not exists.')
+        return render(request, 'signup.html')
+    except models.Member.MultipleObjectsReturned:
+        messages.add_message(request, messages.INFO, 
+            'Multiple user found for this username.')
+        return render(request, 'signup.html')
 
     u = m_db.user
-    u.set_password(new_passwd)
+    u.set_password(password)
     u.save()
-
-    msg = 'you password has been reset to {}'.format(new_passwd)
-    title = 'ImageX Password Reset'
-    sendmail.send_email(title, msg, sendmail.email_from, email)
 
     return HttpResponseRedirect('/signin')
 
@@ -226,16 +260,6 @@ def upload_image_data(request):
         except KeyError:
             return redirect( upload_image_page )
 
-        '''
-        if len(p_dict['tags'])==0:
-            p_dict['tags']="None"
-
-        if len(p_dict['description'])==0:
-            p_dict['description']="None"
-
-        if len(p_dict['category'])==0:
-            p_dict['category']="None"
-        '''
         if p_dict['tags'].count(' ')>9:
             messages.add_message(request, messages.INFO, 'You can select at most ten tags!')
             return render(request, 'upload_image.html')
@@ -308,17 +332,18 @@ def signupdata(request):
     token = request.POST['token']
 
     try:
-        t_obj = models.TokenInfo.objects.get(token=token)
-    except models.TokenInfo.DoesNotExist:
+        t_obj = models.register_Token.objects.get(token=token)
+    except models.register_Token.DoesNotExist:
         messages.add_message(request, messages.INFO, 
             'Token does not exists.')
         return render(request, 'signup.html')
-    except models.TokenInfo.MultipleObjectsReturned:
+    except models.register_Token.MultipleObjectsReturned:
         messages.add_message(request, messages.INFO, 
             'Multiple emails found for this token.')
         return render(request, 'signup.html')
 
     email = t_obj.email
+    t_obj.delete()
 
     if User.objects.filter(username=request.POST['username']).exists():
         messages.add_message(request, messages.INFO, 
