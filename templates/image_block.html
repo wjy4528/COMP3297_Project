@@ -4,9 +4,15 @@
 			<img src="/static/media/{{img.imagefile}}" alt="" style="height: 180px">
 		</a>
 	</div>
+
 	<div class="fh5co-desc">
-		<p><span class="icon_span" >
-				<strong >
+		<p>
+			{% if img.title %}
+				<strong> {{img.title}} </strong>
+			{% endif %}
+
+			<span class="icon_span" >
+				<strong>
 					<img src="/static/images/heart.png" onclick="add_likes(event)" data-imgid={{img.id}}>
 					&nbsp<span>{{img.likes}}</span>&nbsp
 				</strong>
@@ -19,8 +25,8 @@
 				</strong>
 				{% if my_own_pic %}
 					<strong>
-						<a href="/image/delete/data/{{img.id}}" style="text-decoration: none">
-							<img src="/static/images/delete.png" onclick="" data-imgid={{img.id}}>
+						<a style="text-decoration: none">
+							<img src="/static/images/delete.png" onclick="delete_image_confirm(event)" data-imgid={{img.id}}>
 						</a>
 					</strong>
 				{% endif %}
@@ -36,12 +42,20 @@
 			{% if img.tags %}
 				</br> <strong> Tags:  </strong> {{img.tags}} 
 			{% endif %}
-			{% if img.title %}
-				</br> <strong> Title:  </strong> {{img.title}} 
-			{% endif %}
+
 			{% if img.description %}
 				</br> <strong> Descrption: </strong> {{img.description}}
 			{% endif %}
 		</p>
 	</div>
 </div>
+
+<script>
+	var delete_image_confirm = function(event){
+		if (confirm('Are you sure you want to delete this image?')) {
+			let url = "/image/delete/data/" + event.target.dataset.imgid;
+			window.location = url;
+		}		
+	}
+
+</script>
