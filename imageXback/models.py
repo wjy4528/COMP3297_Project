@@ -27,7 +27,7 @@ class ImageForm(forms.ModelForm):
     tags = forms.CharField(required=False)
     category = forms.CharField(required=False)
     description = forms.CharField(required=False)
-    title = forms.CharField(required=True)
+    title = forms.CharField(required=False)
 
     class Meta:
         model = Image

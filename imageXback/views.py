@@ -55,8 +55,18 @@ def update_download(request,imgID):
 def search_image(request):
     search_str = request.GET['searchstring']
     template = loader.get_template('index.html')
+
+    try:
+        u_obj = models.User.objects.get(username=search_str)
+        uid = u_obj.id
+    except Exception as err:
+        print(err )
+        uid = -1
+
+    print( '-----------' )
+    print( uid )
     images = models.Image.objects.all().filter( 
-        Q( category=search_str.lower() ) | Q( tags__icontains=search_str )  | Q( description__icontains=search_str ) )
+        Q( category=search_str.lower() ) | Q( tags__icontains=search_str )  | Q( description__icontains=search_str ) | Q(uploader=uid)) 
 
     return HttpResponse(template.render({'images':images}, request))
 
