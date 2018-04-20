@@ -35,9 +35,9 @@
 				&nbsp&nbsp&nbsp 
 				<strong>
 					<a href="/image/download/data/{{img.id}}" style="text-decoration: none" download>
-						<img src="/static/images/download.png" onclick="add_download(event)" data-imgid={{img.id}}>
-						&nbsp<span>{{img.download}}</span>&nbsp
+						<img src="/static/images/download.png" onclick="add_download(event)" data-imgid={{img.id}} style="">
 					</a>
+					&nbsp<span>{{img.download}}</span>&nbsp
 				</strong>
 				{% if my_own_pic %}
 					<strong>
@@ -51,8 +51,8 @@
 
 			<!-- </br> Description... -->
 			</br> 
-			<strong> 
-				Photographer: <a href="profile/view/{{img.uploader.id}}" style="text-decoration: none">{{img.uploader}}</a>
+			<strong style="display: inline-flex;"> 
+				Photographer: &nbsp <a href="profile/view/{{img.uploader.id}}" style="text-decoration: none">{{img.uploader}}</a>
 			</strong>
 
 			{% if img.category %}
