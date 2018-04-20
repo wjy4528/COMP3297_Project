@@ -34,7 +34,10 @@
 
 
 			<!-- </br> Description... -->
-			</br> <strong> Photographer: </strong> {{img.uploader}} 
+			</br> 
+			<strong> 
+				Photographer: <a href="profile/view/{{img.uploader.id}}" style="text-decoration: none">{{img.uploader}}</a>
+			</strong>
 
 			{% if img.category %}
 				</br> <strong> Category: </strong> {{img.category}} 
