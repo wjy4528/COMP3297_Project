@@ -66,7 +66,7 @@ def search_image(request):
     print( '-----------' )
     print( uid )
     images = models.Image.objects.all().filter( 
-        Q( category=search_str.lower() ) | Q( tags__icontains=search_str )  | Q( description__icontains=search_str ) | Q(uploader=uid)) 
+        Q( category=search_str.lower() ) | Q( tags = search_str )  | Q( description__icontains=search_str ) | Q(uploader=uid)) 
 
     return HttpResponse(template.render({'images':images}, request))
 
@@ -353,7 +353,7 @@ def signupdata(request):
         return render(request, 'signup.html')
 
     email = t_obj.email
-    t_obj.delete()
+    
 
     if User.objects.filter(username=request.POST['username']).exists():
         messages.add_message(request, messages.INFO, 
@@ -386,7 +386,7 @@ def signupdata(request):
         username=request.POST['username'])
 
     m.save()
-
+    t_obj.delete()
     login(request, u)
 
     return HttpResponseRedirect('/')

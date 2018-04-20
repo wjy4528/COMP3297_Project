@@ -12,10 +12,26 @@
 			{% endif %}
 
 			<span class="icon_span" >
-				<strong>
-					<img src="/static/images/heart.png" onclick="add_likes(event)" data-imgid={{img.id}}>
-					&nbsp<span>{{img.likes}}</span>&nbsp
-				</strong>
+				{% if user.is_authenticated %}
+					{% if user.username == img.uploader.username %}
+						<strong>
+							<img src="/static/images/heart.png" onclick="" data-imgid={{img.id}}>
+							&nbsp<span>{{img.likes}}</span>&nbsp
+						</strong>
+					{% else %}
+						<strong>
+							<img src="/static/images/heart.png" onclick="add_likes(event)" data-imgid={{img.id}}>
+							&nbsp<span>{{img.likes}}</span>&nbsp
+						</strong>
+					{% endif %}
+				{% else %}
+					<strong>
+						<img src="/static/images/heart.png" onclick="" data-imgid={{img.id}}>
+						&nbsp<span>{{img.likes}}</span>&nbsp
+					</strong>
+				{% endif %}
+
+
 				&nbsp&nbsp&nbsp 
 				<strong>
 					<a href="/image/download/data/{{img.id}}" style="text-decoration: none" download>
