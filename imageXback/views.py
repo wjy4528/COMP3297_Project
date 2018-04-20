@@ -72,11 +72,31 @@ def search_image(request):
 
 def my_profile(request):
     template = loader.get_template('my_profile.html')
-    return HttpResponse(template.render({}, request))
+
+    mem_obj = models.Member.objects.get(user=request.user.id)
+
+    style_obj = {
+        "its_me":True,
+        "email":mem_obj.email,
+        "description":mem_obj.description,
+        "username":mem_obj.username
+    }
+
+    return HttpResponse(template.render(style_obj, request))
 
 def edit_profile(request):
     template = loader.get_template('edit_profile.html')
-    return HttpResponse(template.render({}, request))
+
+    mem_obj = models.Member.objects.get(user=request.user.id)
+
+    style_obj = {
+        "its_me":True,
+        "email":mem_obj.email,
+        "description":mem_obj.description,
+        "username":mem_obj.username
+    }
+
+    return HttpResponse(template.render(style_obj, request))
 
 def all_image(request):
     template = loader.get_template('index.html')
@@ -112,6 +132,19 @@ def delete_image_data(request, imgID):
     user_db.save()
 
     return HttpResponseRedirect('/image/self')
+
+def profile_view(request, memberID):
+    template = loader.get_template('my_profile.html')
+    mem_obj = models.Member.objects.get(id=memberID)
+
+    style_obj = {
+        "its_me":False,
+        "email":mem_obj.email,
+        "description":mem_obj.description,
+        "username":mem_obj.username
+    }
+
+    return HttpResponse(template.render(style_obj, request))
 
 def token_generate_new(request):
     email = request.POST.get('email', False)

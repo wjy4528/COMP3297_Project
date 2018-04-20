@@ -29,6 +29,7 @@ urlpatterns = [
     path('signout/', views.signout, name='signout'),
     path('my_profile/', views.my_profile, name='my_profile'),
     path('edit_profile/', views.edit_profile, name='edit_profile'),
+    path('profile/view/<int:memberID>', views.profile_view, name='profile_view'),
     path('image/member/<int:memberID>', views.member_image, name='member_image'),
     path('image/self', views.my_image, name='my_image'),
     path('image/all/', views.all_image, name='all_image'),
