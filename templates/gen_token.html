@@ -7,7 +7,7 @@
 	<head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Get Token to imageX</title>
+	<title>Send Token to imageX</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
 	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
@@ -80,14 +80,14 @@
 						    </div>
 						{% endfor %}
 					{% endif %}
-					<h2><strong>Get Token</strong></h2>
+					<h2><strong>Send000 Token</strong></h2>
 					<div class="fh5co-spacer fh5co-spacer-sm"></div>
 					<form action="/token/generate/new" method="POST">
                         {% csrf_token %}
 						<div class="row">
 							<div class="col-md-12">
 								<div class="form-group">
-									<input type="text" class="form-control" placeholder="email you want to invite" name="email">
+									<input type="text" class="form-control" placeholder="Email address of invitee" name="email">
 								</div>
 							</div>
 							<div class="col-md-12">
@@ -100,7 +100,7 @@
 								</div>
 							-->
 								<div class="form-group">
-									<input type="submit" class="btn btn-primary" value="generate">
+									<input type="submit" class="btn btn-primary" value="send">
 								</div>
 							</div>
 						</div>
