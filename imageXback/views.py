@@ -295,7 +295,7 @@ def upload_image_data(request):
             p_dict['uploader'] = request.user.id
             p_dict['tags'] = ' '.join( p_dict['tags'] )
             p_dict['title'] = ' '.join( p_dict['title'] )
-            p_dict['category'] = p_dict['category'][0].lower()
+            p_dict['category'] = p_dict['category'][0]
             #print(p_dict)
             #print(p_dict['description'])
             p_dict['description'] = ' '.join( p_dict['description'])
