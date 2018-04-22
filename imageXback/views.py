@@ -150,7 +150,7 @@ def token_generate_new(request):
     email = request.POST.get('email', False)
 
     if not email:
-        return HttpResponse('email must be supplied')
+        return HttpResponse('An Email Address must be supplied')
 
     token = get_token()
 
@@ -160,7 +160,7 @@ def token_generate_new(request):
     ti.save()
 
     title = 'ImageX Token'
-    content = 'you token is :\n{}'.format(token)
+    content = 'You have been invited to join ImageX. Your Signup Token is:\n{}'.format(token)
     f = sendmail.email_from
     sendmail.send_email(title,content,f,email)
 
