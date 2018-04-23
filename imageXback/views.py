@@ -22,6 +22,8 @@ MAX_UPLOAD_PER_DAY = 40
 
 BASE64_string = string.ascii_letters + string.digits + '+.'
 
+TAG_SEP = ','
+
 def get_token(sz=32):
     return ''.join([random.choice(BASE64_string) for _ in range(sz)])
 
@@ -68,7 +70,7 @@ def search_image(request):
         uid = -1
 
     images = models.Image.objects.all().filter( 
-        Q( category__iexact=search_str ) | Q( tags__iexact=search_str )  | Q(uploader=uid)) 
+        Q( category__iexact=search_str ) | Q( tags__icontains=search_str )  | Q(uploader=uid)) 
 
     for img in images:
         img.uploadedOn = img.uploadedOn.strftime("%y%m%d-%H%M%S")
@@ -303,52 +305,54 @@ def upload_image_data(request):
             p_dict['tags'] = ' '.join( p_dict['tags'] )
             p_dict['title'] = ' '.join( p_dict['title'] )
             p_dict['category'] = p_dict['category'][0]
-            #print(p_dict)
-            #print(p_dict['description'])
             p_dict['description'] = ' '.join( p_dict['description'])
 
         except KeyError:
             return redirect( upload_image_page )
 
-        if p_dict['tags'].count(' ')>9:
+        if p_dict['tags'].count(TAG_SEP)>9:
             messages.add_message(request, messages.INFO, 'You can select at most ten tags!')
             return render(request, 'upload_image.html')
+
+        # encode into ,aa,bb,cc, form, for when searching
+        # we query ,str, and we can search for the tag
+        p_dict['tags'] = TAG_SEP + p_dict['tags'].strip( TAG_SEP ) + TAG_SEP
+
+        user_db = models.Member.objects.get(user=request.user)
+
+        if user_db.uploadCount >= MAX_UPLOAD_TOTAL:
+            messages.add_message(request, messages.INFO, 'You have reached your total upload limitation!')
+            return render(request, 'upload_image.html')
+
+        today = datetime.datetime.now().date()
+        if models.Image.objects.filter(
+                uploader=request.user.id,
+                uploadedOn__gte=today
+            ).count() >= MAX_UPLOAD_PER_DAY:
+            messages.add_message(request, messages.INFO, 'You have reached your daily upload limitation!')
+            return render(request, 'upload_image.html')
+
+        print( p_dict['tags'] )
+
+        image_obj = models.ImageForm(p_dict, request.FILES)
+
+        if image_obj.is_valid():
+            image_obj.save()
+            user_db.uploadCount += 1
+            user_db.save()
+            return HttpResponseRedirect('/')
         else:
-            user_db = models.Member.objects.get(user=request.user)
+            '''
+            for field in image_obj:
+                if field != 'description':
+                    if field != 'tags':
+                        if field.errors:
+                            print(field.errors)
 
-            print( user_db.id )
-
-            if user_db.uploadCount >= MAX_UPLOAD_TOTAL:
-                messages.add_message(request, messages.INFO, 'You have reached your total upload limitation!')
-                return render(request, 'upload_image.html')
-
-            today = datetime.datetime.now().date()
-            if models.Image.objects.filter(
-                    uploader=request.user.id,
-                    uploadedOn__gte=today
-                ).count() >= MAX_UPLOAD_PER_DAY:
-                messages.add_message(request, messages.INFO, 'You have reached your daily upload limitation!')
-                return render(request, 'upload_image.html')
-
-            image_obj = models.ImageForm(p_dict, request.FILES)
-
-            if image_obj.is_valid():
-                image_obj.save()
-                user_db.uploadCount += 1
-                user_db.save()
-                return HttpResponseRedirect('/')
-            else:
-                '''
-                for field in image_obj:
-                    if field != 'description':
-                        if field != 'tags':
-                            if field.errors:
-                                print(field.errors)
-
-                return render_to_response('upload_image.html', {'form': image_obj})
-                '''
-                messages.add_message(request, messages.INFO, 'You must select at least one Image!')
-                return render(request, 'upload_image.html')
+            return render_to_response('upload_image.html', {'form': image_obj})
+            '''
+            messages.add_message(request, messages.INFO, 'You must select at least one Image!')
+            return render(request, 'upload_image.html')
 
     else:
         return redirect( upload_image_page )
