@@ -391,9 +391,9 @@ def signindata(request):
             if reobj:
                 return HttpResponseRedirect(reobj.groups(0)[0])
 
-        return HttpResponseRedirect('/home')
+        return HttpResponseRedirect('/')
     else:
-        messages.add_message(request, messages.INFO, 'Wrong Password or Username!')
+        messages.add_message(request, messages.INFO, 'Wrong Username or Password!')
         return render(request, 'signin.html')
 
 def signupdata(request):

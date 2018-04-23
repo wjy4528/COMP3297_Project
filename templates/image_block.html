@@ -70,13 +70,3 @@
 	</div>
 </div>
 
-
-<script>
-	var delete_image_confirm = function(event){
-		if (confirm('Are you sure you want to delete this image?')) {
-			let url = "/image/delete/data/" + event.target.dataset.imgid;
-			window.location = url;
-		}		
-	}
-</script>
-
