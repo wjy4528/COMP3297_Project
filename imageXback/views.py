@@ -17,8 +17,8 @@ import random
 import string
 import mimetypes
 
-MAX_UPLOAD_TOTAL = 40
-MAX_UPLOAD_PER_DAY = 30
+MAX_UPLOAD_TOTAL = 30
+MAX_UPLOAD_PER_DAY = 40
 
 BASE64_string = string.ascii_letters + string.digits + '+.'
 
@@ -34,6 +34,10 @@ def index(request):
 def home(request):
     template = loader.get_template('index.html')
     images = models.Image.objects.all()
+
+    for img in images:
+        img.uploadedOn = img.uploadedOn.strftime("%y%m%d-%H%M%S")
+
     return HttpResponse(template.render({'images':images}, request))
 
 def signin(request):
@@ -63,10 +67,11 @@ def search_image(request):
         print(err )
         uid = -1
 
-    print( '-----------' )
-    print( uid )
     images = models.Image.objects.all().filter( 
-        Q( category=search_str.lower() ) | Q( tags = search_str )  | Q( description__icontains=search_str ) | Q(uploader=uid)) 
+        Q( category__iexact=search_str ) | Q( tags__iexact=search_str )  | Q( description__icontains=search_str ) | Q(uploader=uid)) 
+
+    for img in images:
+        img.uploadedOn = img.uploadedOn.strftime("%y%m%d-%H%M%S")
 
     return HttpResponse(template.render({'images':images}, request))
 
