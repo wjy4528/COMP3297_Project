@@ -240,7 +240,6 @@ def password_forget_page(request, token):
 def password_forget_reset(request):
     username = request.POST['username']
     password = request.POST['password']
-
     try:
         m_db = models.Member.objects.get(username=username)
     except models.Member.DoesNotExist:
