@@ -68,7 +68,7 @@ def search_image(request):
         uid = -1
 
     images = models.Image.objects.all().filter( 
-        Q( category__iexact=search_str ) | Q( tags__iexact=search_str )  | Q( description__icontains=search_str ) | Q(uploader=uid)) 
+        Q( category__iexact=search_str ) | Q( tags__iexact=search_str )  | Q(uploader=uid)) 
 
     for img in images:
         img.uploadedOn = img.uploadedOn.strftime("%y%m%d-%H%M%S")
@@ -148,7 +148,8 @@ def profile_view(request, memberID):
         "its_me":False,
         "email":mem_obj.email,
         "description":mem_obj.description,
-        "username":mem_obj.username
+        "username":mem_obj.username,
+        "contact":mem_obj.contact_info
     }
 
     return HttpResponse(template.render(style_obj, request))
