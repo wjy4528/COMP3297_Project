@@ -1,7 +1,6 @@
 from django import forms
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils import timezone
 from . import settings
 
 class Image(models.Model):
@@ -12,7 +11,6 @@ class Image(models.Model):
     title = models.CharField(max_length=30, null=True)
     lastModified = models.DateField(auto_now_add=True)
     uploadedOn = models.DateField(auto_now_add=True)
-    uploadedTime = models.DateTimeField(auto_now_add=True)
     imagefile = models.FileField()
     tags = models.CharField(max_length=100,null=True)
     uploader = models.ForeignKey(User,on_delete=models.DO_NOTHING)
