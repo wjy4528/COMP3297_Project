@@ -52,4 +52,5 @@ urlpatterns = [
     path('api/updatelike/<int:imgID>', views.update_likes, name='update_likes'),
     path('api/update_download/<int:imgID>', views.update_download, name='update_download'),
     # path('api/delete/<int:imgID>', views.delete_image, name='delete_image'),
+    path('edit_profile/update/',views.update_profile, name='update_profile'),
 ]
