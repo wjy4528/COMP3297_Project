@@ -265,7 +265,7 @@
 			}
 		}else if(opt == "popularity"){
 			compareFunc = function(a,b){
-				return (b.dataset.like + b.dataset.download) - (a.dataset.like + a.dataset.download);
+				return (parseInt(b.dataset.like) + parseInt(b.dataset.download)) - (parseInt(a.dataset.like) + parseInt(a.dataset.download));
 			}
 		}else{
 			return 0;
