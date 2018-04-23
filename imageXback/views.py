@@ -318,7 +318,6 @@ def upload_image_data(request):
                 return render(request, 'upload_image.html')
 
             today = datetime.datetime.now().date()
-
             if models.Image.objects.filter(
                     uploader=request.user.id,
                     uploadedOn__gte=today
@@ -330,7 +329,6 @@ def upload_image_data(request):
 
             if image_obj.is_valid():
                 image_obj.save()
-
                 user_db.uploadCount += 1
                 user_db.save()
                 return HttpResponseRedirect('/')
@@ -447,7 +445,6 @@ def signupdata(request):
     m.save()
     t_obj.delete()
     login(request, u)
-
     return HttpResponseRedirect('/')
 
 @login_required

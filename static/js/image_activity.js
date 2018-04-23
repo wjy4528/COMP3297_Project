@@ -13,17 +13,7 @@ function add_likes(event){
 
 
 
-function add_download(event){
-	x=event.target;
-	img=x.dataset.imgid;
-	x.parentElement.children[1].textContent=(parseInt(x.parentElement.children[1].textContent)+1);
 
-/*
-$.get('/api/update_download/'+img, function(){
-	
-});
-*/
-}
 
 
 var delete_image_confirm = function(event){
