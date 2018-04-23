@@ -57,10 +57,10 @@
 			</strong>
 
 			{% if img.category %}
-				</br> <strong> Category: </strong> {{img.category}} 
+				</br> <strong> Category: </strong> <span style="text-transform: capitalize">{{img.category}}</span> 
 			{% endif %}
 			{% if img.tags %}
-				</br> <strong> Tags:  </strong> {{img.tags}} 
+</br> <strong> Tags: </strong> <span style="text-transform: capitalize">{{img.tags}}</span>
 			{% endif %}
 
 			{% if img.description %}
