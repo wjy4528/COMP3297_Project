@@ -87,7 +87,6 @@ def my_profile(request):
         "email":mem_obj.email,
         "description":mem_obj.description,
         "username":mem_obj.username,
-        "contact":mem_obj.contact_info
     }
 
     return HttpResponse(template.render(style_obj, request))
@@ -102,7 +101,6 @@ def edit_profile(request):
         "email":mem_obj.email,
         "description":mem_obj.description,
         "username":mem_obj.username,
-        "contact":mem_obj.contact_info
     }
 
     return HttpResponse(template.render(style_obj, request))
@@ -151,7 +149,6 @@ def profile_view(request, memberID):
         "email":mem_obj.email,
         "description":mem_obj.description,
         "username":mem_obj.username,
-        "contact":mem_obj.contact_info
     }
 
     return HttpResponse(template.render(style_obj, request))
@@ -367,7 +364,6 @@ def update_profile(request):
     update_username = request.POST['username']
     update_email = request.POST['email']
     update_description = request.POST['description']
-    update_contact = request.POST['contact']
     
     mem_obj = models.Member.objects.get(user=request.user.id)
     if (len(update_username) != 0):
@@ -377,8 +373,6 @@ def update_profile(request):
         user.save()
     if (len(update_email) != 0):
         models.Member.objects.filter(id=request.user.id).update(email=update_email)
-    if (len(update_contact) != 0):
-        models.Member.objects.filter(id=request.user.id).update(contact_info=update_contact)
     models.Member.objects.filter(id=request.user.id).update(description=update_description)
     
     return HttpResponseRedirect('/my_profile')

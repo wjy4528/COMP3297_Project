@@ -18,7 +18,6 @@ class Member(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(max_length=50, default="null@null", unique=True)
-    contact_info = models.EmailField(max_length=50, default="null@null")
     description = models.CharField(max_length=300, null=True)
     uploadCount = models.IntegerField(default=0)
 

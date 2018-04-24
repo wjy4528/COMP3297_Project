@@ -50,16 +50,26 @@
 			
 
 			<!-- </br> Description... -->
-			</br> 
-			<strong style="display: inline-flex;"> 
-				Photographer: &nbsp <a href="profile/view/{{img.uploader.id}}" style="text-decoration: none">{{img.uploader}}</a>
-			</strong>
+			</br>
 
+			{% if user.username == img.uploader.username %}
+				<strong style="display: inline-flex;">
+					Photographer: &nbsp <a href="my_profile/" style="text-decoration: none">{{img.uploader}}</a>
+				</strong>
+			{% else %}
+
+			
+				<strong style="display: inline-flex;">
+					Photographer: &nbsp <a href="profile/view/{{img.uploader.id}}" style="text-decoration: none">{{img.uploader}}</a>
+				</strong>
+			{% endif %}
 			{% if img.category %}
 				</br> <strong> Category: </strong> <span style="text-transform: capitalize">{{img.category}}</span> 
 			{% endif %}
 			{% if img.tags %}
-				</br> <strong> Tags: </strong> <span>{{img.tags}}</span>
+				{% if img.tags != ",," %}
+					</br> <strong> Tags: </strong> <span>{{img.tags}}</span>
+				{% endif %}
 			{% endif %}
 
 			{% if img.description %}
