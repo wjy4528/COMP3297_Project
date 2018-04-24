@@ -36,7 +36,6 @@ urlpatterns = [
     path('image/search', views.search_image, name='search_image'),
     path('image/upload/page/', views.upload_image_page, name='upload_image_page'),
     path('image/upload/new/', views.upload_image_data, name='upload_image_data'),
-    path('image/delete/page/', views.delete_image_page, name='delete_image_page'),
     path('image/delete/data/<int:imgID>', views.delete_image_data, name='delete_image_data'),
     path('image/download/data/<int:imgID>', views.download_image_data, name='download_image_data'),
     path('password/forget/email', views.password_forget_email, name='password_forget_email'),

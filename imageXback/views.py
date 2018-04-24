@@ -17,8 +17,8 @@ import random
 import string
 import mimetypes
 
-MAX_UPLOAD_TOTAL = 30
-MAX_UPLOAD_PER_DAY = 40
+MAX_UPLOAD_TOTAL = 3
+MAX_UPLOAD_PER_DAY = 4
 
 BASE64_string = string.ascii_letters + string.digits + '+.'
 
@@ -35,7 +35,7 @@ def index(request):
 
 def home(request):
     template = loader.get_template('index.html')
-    images = models.Image.objects.all()
+    images = models.Image.objects.filter(deleted=0)
 
     for img in images:
         img.uploadedOn = img.uploadedOn.strftime("%y%m%d-%H%M%S")
@@ -51,11 +51,11 @@ def signup(request):
     return HttpResponse(template.render({}, request))
 
 def update_likes(request,imgID):
-    models.Image.objects.filter(id=imgID).update(likes=F('likes')+1)
+    models.Image.objects.filter(id=imgID,deleted=0).update(likes=F('likes')+1)
     return HttpResponse(request)
 
 def update_download(request,imgID):
-    models.Image.objects.filter(id=imgID).update(download=F('download')+1)
+    models.Image.objects.filter(id=imgID,deleted=0).update(download=F('download')+1)
     return HttpResponse(request)
 
 def search_image(request):
@@ -69,8 +69,8 @@ def search_image(request):
         print(err )
         uid = -1
 
-    images = models.Image.objects.all().filter( 
-        Q( category__iexact=search_str ) | Q( tags__icontains=search_str )  | Q(uploader=uid)) 
+    images = models.Image.objects.filter(
+        Q( category__iexact=search_str ) | Q( tags__icontains=search_str )  | Q(uploader=uid) & Q(deleted=0) )
 
     for img in images:
         img.uploadedOn = img.uploadedOn.strftime("%y%m%d-%H%M%S")
@@ -111,18 +111,13 @@ def all_image(request):
 
 def member_image(request, memberID):
     template = loader.get_template('index.html')
-    images = models.Image.objects.all().filter( uploader_id=memberID )
+    images = models.Image.objects.all().filter( uploader_id=memberID, deleted=0)
     return HttpResponse(template.render({'images':images}, request))
-
-def delete_image_page(request, imgID):
-    #template = loader.get_template('index.html')
-    models.Image.objects.all().filter( id=imgID ).delete()
-    return HttpResponseRedirect('/')
 
 def delete_image_data(request, imgID):
 
     try:
-        img = models.Image.objects.all().get( id=imgID, uploader_id=request.user.id )
+        img = models.Image.objects.all().get( id=imgID, uploader_id=request.user.id, deleted=0 )
     except models.Image.DoesNotExist:
         messages.add_message(request, messages.INFO, 
             'email does not exists.')
@@ -132,7 +127,8 @@ def delete_image_data(request, imgID):
             'Multiple user found for this email.')
         return HttpResponseRedirect('/image/self')
 
-    img.delete()
+    img.deleted = 1
+    img.save()
 
     user_db = models.Member.objects.all().get(user=request.user)
     user_db.uploadCount -= 1
@@ -180,7 +176,7 @@ def token_generate_page(request):
 @login_required
 def download_image_data(request, imgID):
     # imgID = imgID
-    img = models.Image.objects.all().get(id=imgID)
+    img = models.Image.objects.all().get(id=imgID, deleted=0)
     img_p = os.path.join( settings.MEDIA_ROOT, str(img.imagefile) )
 
     with open(img_p, 'rb') as fp:
@@ -196,7 +192,7 @@ def download_image_data(request, imgID):
         response['Content-Type'] = file_type
         response['Content-Length'] = str(os.stat(img_p).st_size)
 
-    models.Image.objects.filter(id=imgID).update(download=F('download')+1)
+    models.Image.objects.filter(id=imgID, deleted=0).update(download=F('download')+1)
     return response
 
 def password_forget_email(request):
@@ -284,7 +280,7 @@ def password_change_set(request):
 @login_required
 def my_image(request):
     template = loader.get_template('my_image.html')
-    images = models.Image.objects.all().filter( uploader_id=request.user.id )
+    images = models.Image.objects.all().filter( uploader_id=request.user.id, deleted=0 )
     return HttpResponse(template.render({'images':images,'my_own_pic':True}, request))
 
 @login_required
@@ -321,10 +317,12 @@ def upload_image_data(request):
             messages.add_message(request, messages.INFO, 'You have reached your total upload limitation!')
             return render(request, 'upload_image.html')
 
+        # here we also include the images that are deleted
+        # since those images are also included in the quota
         today = datetime.datetime.now().date()
         if models.Image.objects.filter(
                 uploader=request.user.id,
-                uploadedOn__gte=today
+                uploadedOn__gte=today,
             ).count() >= MAX_UPLOAD_PER_DAY:
             messages.add_message(request, messages.INFO, 'You have reached your daily upload limitation!')
             return render(request, 'upload_image.html')

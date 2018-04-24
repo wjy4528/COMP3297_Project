@@ -13,6 +13,7 @@ class Image(models.Model):
     imagefile = models.FileField()
     tags = models.CharField(max_length=100,null=True)
     uploader = models.ForeignKey(User,on_delete=models.DO_NOTHING)
+    deleted = models.IntegerField(default=0)
 
 class Member(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
