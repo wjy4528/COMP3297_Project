@@ -330,7 +330,7 @@ def upload_image_data(request):
         user_db = models.Member.objects.get(user=request.user)
 
         if user_db.uploadCount >= MAX_UPLOAD_TOTAL:
-            messages.add_message(request, messages.INFO, 'You have reached your total upload limitation!')
+            messages.add_message(request, messages.INFO, 'You have reached your total upload limit!')
             return render(request, 'upload_image.html')
 
         today = datetime.datetime.now().date()
@@ -338,7 +338,7 @@ def upload_image_data(request):
                 uploader=request.user.id,
                 uploadedOn__gte=today
             ).count() >= MAX_UPLOAD_PER_DAY:
-            messages.add_message(request, messages.INFO, 'You have reached your daily upload limitation!')
+            messages.add_message(request, messages.INFO, 'You have reached your daily upload limit!')
             return render(request, 'upload_image.html')
 
         print( p_dict['tags'] )
