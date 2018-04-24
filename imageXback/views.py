@@ -243,23 +243,35 @@ def password_forget_page(request, token):
     return HttpResponse(template.render({'username':u}, request))
 
 def password_forget_reset(request):
+    
     username = request.POST['username']
+
+    if (request.POST['confirm_password'] != request.POST['password']):
+        messages.add_message(request, messages.INFO, 
+            'Password must be the same!')
+        return render(request, 'password_forget_page.html', {'username': username})
+    elif (len(request.POST['confirm_password']) == 0 ):
+        messages.add_message(request, messages.INFO, 
+            'Password cannot be empty')
+        return render(request, 'password_forget_page.html', {'username': username})
+    
     password = request.POST['password']
+
     try:
         m_db = models.Member.objects.get(username=username)
     except models.Member.DoesNotExist:
         messages.add_message(request, messages.INFO, 
-            'username does not exists.')
+            'Username does not exist.')
         return render(request, 'signup.html')
     except models.Member.MultipleObjectsReturned:
         messages.add_message(request, messages.INFO, 
-            'Multiple user found for this username.')
+            'Multiple users found for this username.')
         return render(request, 'signup.html')
 
     u = m_db.user
     u.set_password(password)
     u.save()
-
+   
     return HttpResponseRedirect('/signin')
 
 def password_change_page(request):
