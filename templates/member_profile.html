@@ -1,0 +1,137 @@
+{% load static %}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>My Profile</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
+	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
+	<meta name="author" content="FREEHTML5.CO" />
+
+  <!-- 
+	//////////////////////////////////////////////////////
+
+	FREE HTML5 TEMPLATE 
+	DESIGNED & DEVELOPED by FREEHTML5.CO
+		
+	Website: 		http://freehtml5.co/
+	Email: 			info@freehtml5.co
+	Twitter: 		http://twitter.com/fh5co
+	Facebook: 		https://www.facebook.com/fh5co
+
+	//////////////////////////////////////////////////////
+	 -->
+
+  <!-- Facebook and Twitter integration -->
+	<meta property="og:title" content=""/>
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content=""/>
+	<meta property="og:site_name" content=""/>
+	<meta property="og:description" content=""/>
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+	<link rel="shortcut icon" href="favicon.ico">
+
+	<!-- Google Webfonts -->
+	<link href='http://fonts.googleapis.com/css?family=Roboto:400,300,100,500' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+	
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="/static/css/animate.css">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="/static/css/icomoon.css">
+	<!-- Magnific Popup -->
+	<link rel="stylesheet" href="/static/css/magnific-popup.css">
+	<!-- Salvattore -->
+	<link rel="stylesheet" href="/static/css/salvattore.css">
+	<!-- Theme Style -->
+	<link rel="stylesheet" href="/static/css/style.css">
+	<link rel="stylesheet" href="/static/css/profile.css">
+	<!-- Modernizr JS -->
+	<script src="/static/js/modernizr-2.6.2.min.js"></script>
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="/static/js/respond.min.js"></script>
+	<![endif]-->
+
+	</head>
+	<body>
+
+	{% include "./sidebar.html" %}
+	
+	<div id="fh5co-main">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<h2><strong>{{ username }}'s Profile</strong></h2>
+					<div class="fh5co-spacer fh5co-spacer-sm"></div>
+
+					<form action="#">
+					
+						<!--
+							from https://codepen.io/dsalvagni/pen/BLapab
+							credit to Daniel Salvagni
+						-->
+						
+						<div class="profile">
+							<div class="profile_pic">
+								<img src="/static/images/img_3.jpg">
+							</div>
+						</div>
+
+						<!--
+						<hr>
+						<button type="button" id="previewBtn">Preview</button>
+						<hr>
+						<img src="" alt="" class="preview">
+						<img src="" alt="" class="preview preview--rounded">
+						-->
+
+						<!--- end of profile pic -->	
+
+						<!-- email part not mutable by user -->
+						<div class="col-md-12 divide-block"> - </div>
+						<div class="col-md-12 divide-block"> - </div>
+
+
+						<div class="row">
+							<div class="col-md-4">
+								<div class="profile_name"><strong>Username:</strong></div>
+							</div>
+							<div class="col-md-8">
+								<div class="profile_name">{{ username }}</div>
+							</div>
+						</div>
+
+						<div class="row">
+							
+							<div class="col-md-12 divide-block"> - </div>
+							<div class="col-md-4">
+								<div class="profile_name"><strong>Description:</strong></div>
+							</div>
+							<div class="col-md-9" style="width: 100%">
+								<div class="profile_descrip">{{ description }}</div>
+							</div>
+
+						</div>
+
+					</form>
+				</div>
+        	</div>
+       </div>
+	</div>
+
+	{% include "./footer.html" %}
+
+	</body>
+</html>
