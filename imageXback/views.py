@@ -341,7 +341,7 @@ def upload_image_data(request):
 
         # encode into ,aa,bb,cc, form, for when searching
         # we query ,str, and we can search for the tag
-        p_dict['tags'] = TAG_SEP + p_dict['tags'].strip( TAG_SEP ) + TAG_SEP
+        p_dict['tags'] = p_dict['tags'].strip( TAG_SEP )
 
         user_db = models.Member.objects.get(user=request.user)
         '''
