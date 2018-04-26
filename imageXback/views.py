@@ -138,12 +138,10 @@ def delete_image_data(request, imgID):
     return HttpResponseRedirect('/image/self')
 
 def profile_view(request, memberID):
-    template = loader.get_template('my_profile.html')
+    template = loader.get_template('member_profile.html')
     mem_obj = models.Member.objects.get(id=memberID)
-
+    
     style_obj = {
-        "its_me":False,
-        "email":mem_obj.email,
         "description":mem_obj.description,
         "username":mem_obj.username,
     }
