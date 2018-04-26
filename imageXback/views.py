@@ -297,6 +297,22 @@ def my_image(request):
 
 @login_required
 def upload_image_page(request):
+    user_db = models.Member.objects.get(user=request.user)
+
+    if user_db.uploadCount >= MAX_UPLOAD_TOTAL:
+        messages.add_message(request, messages.INFO, 'You have reached your total upload limit!')
+        return render(request, 'upload_limit.html')
+
+    # here we also include the images that are deleted
+    # since those images are also included in the quota
+    today = datetime.datetime.now().date()
+    if models.Image.objects.filter(
+            uploader=request.user.id,
+            uploadedOn__gte=today,
+        ).count() >= MAX_UPLOAD_PER_DAY:
+        messages.add_message(request, messages.INFO, 'You have reached your daily upload limit!')
+        return render(request, 'upload_limit.html')
+
     template = loader.get_template('upload_image.html')
     return HttpResponse(template.render({'form': None}, request))
 
@@ -324,6 +340,8 @@ def upload_image_data(request):
         p_dict['tags'] = TAG_SEP + p_dict['tags'].strip( TAG_SEP ) + TAG_SEP
 
         user_db = models.Member.objects.get(user=request.user)
+        '''
+        user_db = models.Member.objects.get(user=request.user)
 
         if user_db.uploadCount >= MAX_UPLOAD_TOTAL:
             messages.add_message(request, messages.INFO, 'You have reached your total upload limit!')
@@ -338,7 +356,7 @@ def upload_image_data(request):
             ).count() >= MAX_UPLOAD_PER_DAY:
             messages.add_message(request, messages.INFO, 'You have reached your daily upload limit!')
             return render(request, 'upload_image.html')
-
+        '''
         print( p_dict['tags'] )
 
         image_obj = models.ImageForm(p_dict, request.FILES)
