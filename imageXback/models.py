@@ -23,7 +23,7 @@ class Member(models.Model):
     uploadCount = models.IntegerField(default=0)
 
 class ImageForm(forms.ModelForm):
-    tags = forms.CharField(required=False)
+    tags = forms.CharField(required=False, strip=False)
     category = forms.CharField(required=False)
     description = forms.CharField(required=False)
     title = forms.CharField(required=False)

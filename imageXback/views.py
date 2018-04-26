@@ -22,7 +22,7 @@ MAX_UPLOAD_PER_DAY = 4
 
 BASE64_string = string.ascii_letters + string.digits + '+.'
 
-TAG_SEP = ','
+TAG_SEP = ' '
 
 def get_token(sz=32):
     return ''.join([random.choice(BASE64_string) for _ in range(sz)])
@@ -61,16 +61,19 @@ def update_download(request,imgID):
 def search_image(request):
     search_str = request.GET['searchstring']
     template = loader.get_template('index.html')
+    tag_search = TAG_SEP + search_str + TAG_SEP
 
     try:
         u_obj = models.User.objects.get(username=search_str)
         uid = u_obj.id
     except Exception as err:
-        print(err )
+        # print(err )
         uid = -1
 
+    print( tag_search )
+
     images = models.Image.objects.filter(
-        Q( category__iexact=search_str ) | Q( tags__icontains=search_str )  | Q(uploader=uid) & Q(deleted=0) )
+        ( Q( category__iexact=search_str ) | Q( tags__icontains=tag_search )  | Q(uploader=uid) ) & Q(deleted=0) )
 
     for img in images:
         img.uploadedOn = img.uploadedOn.strftime("%y%m%d-%H%M%S")
@@ -106,6 +109,7 @@ def edit_profile(request):
     return HttpResponse(template.render(style_obj, request))
 
 def all_image(request):
+    # seems deprecated
     template = loader.get_template('index.html')
     return HttpResponse(template.render({}, request))
 
@@ -113,9 +117,12 @@ def member_image(request, memberID):
     template = loader.get_template('member_image.html')
     username = models.Member.objects.get(id=memberID).username
     images = models.Image.objects.all().filter( uploader_id=memberID, deleted=0)
-    id = memberID
+    the_id = memberID
 
-    return HttpResponse(template.render({'username':username, 'id':id, 'images':images}, request))
+    for img in images:
+        img.uploadedOn = img.uploadedOn.strftime("%y%m%d-%H%M%S")
+
+    return HttpResponse(template.render({'username':username, 'id':the_id, 'images':images}, request))
 
 def delete_image_data(request, imgID):
 
@@ -305,7 +312,13 @@ def upload_image_page(request):
 
     # here we also include the images that are deleted
     # since those images are also included in the quota
-    today = datetime.datetime.now().date()
+    today = datetime.datetime.utcnow().date()
+    print( today )
+    print( models.Image.objects.filter(
+            uploader=request.user.id,
+            uploadedOn__gte=today,
+        ).count() )
+
     if models.Image.objects.filter(
             uploader=request.user.id,
             uploadedOn__gte=today,
@@ -338,12 +351,18 @@ def upload_image_data(request):
         if p_dict['title'] == '':
             p_dict['title'] = '[Untitled]'
 
+        # say TAG_SEP = ','
         # encode into ,aa,bb,cc, form, for when searching
         # we query ,str, and we can search for the tag
-        p_dict['tags'] = p_dict['tags'].strip( TAG_SEP )
+        p_dict['tags'] = TAG_SEP + p_dict['tags'].strip( TAG_SEP ) + TAG_SEP
+
+        print( p_dict['tags'] )
 
         user_db = models.Member.objects.get(user=request.user)
+        
         '''
+        # original implementation, not needed anymore since the checking is moved
+        # to before even touching the page
         user_db = models.Member.objects.get(user=request.user)
 
         if user_db.uploadCount >= MAX_UPLOAD_TOTAL:
@@ -360,7 +379,6 @@ def upload_image_data(request):
             messages.add_message(request, messages.INFO, 'You have reached your daily upload limit!')
             return render(request, 'upload_image.html')
         '''
-        print( p_dict['tags'] )
 
         image_obj = models.ImageForm(p_dict, request.FILES)
 
@@ -387,8 +405,6 @@ def upload_image_data(request):
 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-
-
 
 @login_required
 def update_profile(request):

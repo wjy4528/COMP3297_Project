@@ -54,11 +54,11 @@
 
 			{% if user.username == img.uploader.username %}
 				<strong style="display: inline-flex;">
-					Photographer: &nbsp <a href="image/self" style="text-decoration: none">{{img.uploader}}</a>
+					Photographer: &nbsp <a href="/image/self" style="text-decoration: none">{{img.uploader}}</a>
 				</strong>
 			{% else %}
 				<strong style="display: inline-flex;">
-					Photographer: &nbsp <a href="image/member/{{img.uploader.id}}" style="text-decoration: none">{{img.uploader}}</a>
+					Photographer: &nbsp <a href="/image/member/{{img.uploader.id}}" style="text-decoration: none">{{img.uploader}}</a>
 				</strong>
 			{% endif %}
 			{% if img.category %}
