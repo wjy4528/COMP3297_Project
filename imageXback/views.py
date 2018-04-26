@@ -244,7 +244,7 @@ def password_forget_reset(request):
 
     if (request.POST['confirm_password'] != request.POST['password']):
         messages.add_message(request, messages.INFO, 
-            'Password must be the same!')
+            'Passwords must be the same!')
         return render(request, 'password_forget_page.html', {'username': username})
     elif (len(request.POST['confirm_password']) == 0 ):
         messages.add_message(request, messages.INFO, 
