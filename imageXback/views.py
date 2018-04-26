@@ -174,7 +174,6 @@ def token_generate_page(request):
     template = loader.get_template('gen_token.html')
     return HttpResponse(template.render({}, request))
 
-@login_required
 def download_image_data(request, imgID):
     # imgID = imgID
     img = models.Image.objects.all().get(id=imgID, deleted=0)
