@@ -334,6 +334,9 @@ def upload_image_data(request):
         if p_dict['tags'].count(TAG_SEP)>9:
             messages.add_message(request, messages.INFO, 'You can select at most ten tags!')
             return render(request, 'upload_image.html')
+        
+        if p_dict['title'] == '':
+            p_dict['title'] = '[Untitled]'
 
         # encode into ,aa,bb,cc, form, for when searching
         # we query ,str, and we can search for the tag
