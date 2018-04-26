@@ -111,9 +111,11 @@ def all_image(request):
 
 def member_image(request, memberID):
     template = loader.get_template('member_image.html')
-    username = models.Member.objects.get( id=memberID ).username
+    username = models.Member.objects.get(id=memberID).username
     images = models.Image.objects.all().filter( uploader_id=memberID, deleted=0)
-    return HttpResponse(template.render({'username':username, 'images':images}, request))
+    id = memberID
+
+    return HttpResponse(template.render({'username':username, 'id':id, 'images':images}, request))
 
 def delete_image_data(request, imgID):
 
